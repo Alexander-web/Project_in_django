@@ -1,14 +1,9 @@
 <html>
     <head>
-        <title>Library</title>
     </head>
     <body>
-    <h1>Books</h1>
-    {% for book in books %}
-    <h2><p>Book - {{book}}</p></h2>
-    <p>Genre - {{book.genre}}</p>
-    <p>Publish - {{book.publ}}</p>
-    <p>Created_date - {{book.created_date}}</p>
+    {% for i in data %}
+    <p>{{i}}</p>
     {%endfor%}
     </body>
 </html>
