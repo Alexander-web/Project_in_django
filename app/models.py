@@ -14,22 +14,24 @@ class MeasureType(models.Model):               #Тип измерерия АЧХ
     def __str__(self):
         return self.name
 
-class SSI(models.Model): 
-    name = models.CharField(max_length=50)                  #Конфигурации
+class SSI(models.Model):                                #Конфигурации
+    name = models.CharField(max_length=50)                  
     input_frequency = models.IntegerField()
     output_frequency = models.IntegerField()
     band_frequency = models.IntegerField()
-    measurement_type = models.ManyToManyField(MeasureType, related_name = 'meas_result')
+    meas_type = models.ManyToManyField(MeasureType, related_name='ssi')
     def __str__(self):
         return self.name
 
-class MeasureResult(models.Model):
+class Measure(models.Model):
     date_time = models.DateTimeField(auto_now_add = True)
-    ssi = models.ForeignKey(SSI, on_delete = models.CASCADE)
-    mesure_type = models.ForeignKey(MeasureType, on_delete = models.CASCADE)
+    ssi = models.ForeignKey(SSI, on_delete = models.CASCADE,related_name='meas')
+    meastype = models.ForeignKey(MeasureType, on_delete = models.CASCADE,related_name = 'measure')
     measurement_data = models.ManyToManyField(MeasureData, related_name = 'meas_result')
     def __str__(self):
         return 'ssi: {}, тип измерения: {}, время измерения: {}'.format(self.ssi, self.mesure_type, self.date_time)
+
+
 
 
 

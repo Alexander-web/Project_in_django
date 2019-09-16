@@ -1,0 +1,38 @@
+{% extends 'app/base.html' %}
+{% block content %}
+
+<table class="table table-bordered">
+    <thead class="thead-light">
+        <tr>
+            <th>SSI_name</th>
+            <th>Входная частота</th>
+            <th>Выходная частота</th>
+            <th>Доступные измерения</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for s in ssi %}
+    <tr>
+        <td>
+        <a href={% url 'ssi_detail' s.name %}>{{s.name}}</a>
+        <div class="small">Проведенные измерения:</div>
+        {% for j in s.meas.all %}
+            <div class="small">{{j.meastype.name}}</div>
+        {% endfor %}
+        </td>
+
+        <td>{{s.input_frequency}}</td>
+
+        <td>{{s.output_frequency}}</td>
+
+        <td>
+            {% for meas in s.meas_type.all %}
+                <a href={% url 'name_meas' meas.name %}>{{meas.name}}</a>
+            {% endfor %}
+        </td>
+    </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}

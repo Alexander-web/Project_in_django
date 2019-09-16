@@ -1,0 +1,24 @@
+{% extends 'app/base.html' %}
+{% block content %}
+
+<table class='container'>
+    <table class="table table-bordered " >
+        <thead>
+            <tr>
+                <th>Meas_name: {{name}}</th>
+                <th>x:</th>
+                <th>y:</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in name_meas %}
+                <tr>
+                    <th scope="row"></th>
+                        <td>{{s.x}}</td>
+                        <td>{{s.y}}</td>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock content %}
