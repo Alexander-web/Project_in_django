@@ -7,7 +7,7 @@ urlpatterns = [
     path('', Baselist.as_view(), name = 'base_list'),
     path('get/', SSIList.as_view(), name = 'ssi_list'),
     path("get/ssi_detail/<slug:ssi>/", SSIDetail.as_view(), name="ssi_detail"),
-    path('get/measure/<str:name>/', Data.as_view(), name="name_meas"),
+    path('get/measure/<slug:ssi_name>/<slug:meas_name>/', MeasuresData.as_view(), name="name_meas"),
     
     
 ]

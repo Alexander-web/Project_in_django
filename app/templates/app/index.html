@@ -1,38 +1,68 @@
 {% extends 'app/base.html' %}
 {% block content %}
 
-<table class="table table-bordered">
-    <thead class="thead-light">
-        <tr>
-            <th>SSI_name</th>
-            <th>Входная частота</th>
-            <th>Выходная частота</th>
-            <th>Доступные измерения</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for s in ssi %}
-    <tr>
-        <td>
-        <a href={% url 'ssi_detail' s.name %}>{{s.name}}</a>
-        <div class="small">Проведенные измерения:</div>
-        {% for j in s.meas.all %}
-            <div class="small">{{j.meastype.name}}</div>
-        {% endfor %}
-        </td>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-8">
+            <table class="table table-bordered">
+                <thead class="thead">
+                    <tr>
+                        <th>SSI_name</th>
+                        <th>Входная частота</th>
+                        <th>Выходная частота</th>
+                        <th>Доступные измерения</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for s in ssi %}
+                <tr>
+                    <td>
 
-        <td>{{s.input_frequency}}</td>
+                        <a href={% url 'ssi_detail' s.name %}>{{s.name}}</a>
+                        <div class="small">Проведенные измерения:</div>
+                        {% for j in s.meas.all %}
+                            <div class="small">{{j.meastype.name}}</div>
+                        {% endfor %}
+                    </td>
 
-        <td>{{s.output_frequency}}</td>
+                    <td>{{s.input_frequency}}</td>
 
-        <td>
-            {% for meas in s.meas_type.all %}
-                <a href={% url 'name_meas' meas.name %}>{{meas.name}}</a>
-            {% endfor %}
-        </td>
-    </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                    <td>{{s.output_frequency}}</td>
+
+                    <td>
+                        {% for meas in s.available_meas.all %}
+                            <a href={% url 'name_meas' s.name meas.name %}>{{meas.name}}</a> 
+                        {% endfor %}
+                    </td>
+                </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+            <div class="col-4">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Имя SSI</th>
+                            <th>Тип измерений</th>
+                            <th>Время добавления</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in  planed_measure%}
+                        <tr>
+                            <th scope="row">{{i.ssi}}</th>
+                            <td>{{i.meastype}}</td>
+                            <td>{{i.date_time}}</td>
+                            <td><a href="#!" class="btn btn-danger">Delete</a></td>
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>  
+    </div>
+</div>
 
 {% endblock content %}
