@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-8">
             <table class="table table-bordered">
-                <thead class="thead">
+                <thead class="thead-light">
                     <tr>
                         <th>SSI_name</th>
                         <th>Входная частота</th>
@@ -17,7 +17,6 @@
                 {% for s in ssi %}
                 <tr>
                     <td>
-
                         <a href={% url 'ssi_detail' s.name %}>{{s.name}}</a>
                         <div class="small">Проведенные измерения:</div>
                         {% for j in s.meas.all %}
@@ -41,7 +40,7 @@
         </div>
             <div class="col-4">
                 <table class="table table-bordered">
-                    <thead>
+                    <thead class="thead-light">
                         <tr>
                             <th>Имя SSI</th>
                             <th>Тип измерений</th>
@@ -55,11 +54,12 @@
                             <th scope="row">{{i.ssi}}</th>
                             <td>{{i.meastype}}</td>
                             <td>{{i.date_time}}</td>
-                            <td><a href="#!" class="btn btn-danger">Delete</a></td>
+                            <td><a href={% url 'ssi_remove' i.id%} class="btn btn-danger">Delete</a></td>
                         {% endfor %}
                         </tr>
                     </tbody>
                 </table>
+                <td><a href={% url 'make_measures' %} class="btn btn-primary">Провести измерения</a></td>
             </div>
         </div>  
     </div>

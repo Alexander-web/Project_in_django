@@ -3,11 +3,6 @@ from django.db import models
 from django.utils import timezone
 import socket
 
-class AcceptData(models.Model): # X-Y данные
-    x = models.FloatField()
-    y = models.FloatField()
-    def __str__(self):
-        return 'x:{} - y:{}'.format(self.x, self.y)
 
 class MeasureType(models.Model):               #Тип измерерия АЧХ, НГВЗ, точка насыщения, АМ-АМ
     name = models.CharField(max_length=50,verbose_name="Тип измерения")
@@ -25,12 +20,21 @@ class SSI(models.Model):                                #Конфигураци�
 
 class Measure_que(models.Model):
     date_time = models.DateTimeField(auto_now_add = True)
-    ssi = models.ForeignKey(SSI, on_delete = models.CASCADE,related_name='meas', verbose_name="Имя SSI")
-    meastype = models.ForeignKey(MeasureType, on_delete = models.CASCADE,related_name = 'measure',verbose_name="Тип измерения")
-    # measurement_data = models.ManyToManyField(AcceptData, related_name = 'meas_result')
+    ssi = models.ForeignKey(SSI, on_delete = models.CASCADE, verbose_name="Имя SSI")
+    meastype = models.ForeignKey(MeasureType, on_delete = models.CASCADE,verbose_name="Тип измерения")
     def __str__(self):
         return 'Имя SSI: {}, Тип измерения: {}, Время измерения: {}'.format(self.ssi, self.meastype, self.date_time)
 
+class Measure(models.Model):
+    time = models.DateTimeField(auto_now_add = True)
+    ssi = models.ForeignKey(SSI, on_delete = models.CASCADE,related_name='meas', verbose_name="Имя SSI")
+    mea = models.ForeignKey(MeasureType, on_delete = models.CASCADE,related_name = 'measure_type',verbose_name="Тип измерения")
+    def __str__(self):
+        return 'Имя SSI: {}, Тип измерения: {}'.format(self.ssi, self.mea)
+
+class AcceptData(models.Model): # X-Y данные
+    measurement_data = models.ForeignKey(Measure, on_delete = models.CASCADE, related_name = 'meas_result',default=1)
+    xy = models.TextField('Полученные данные x,y')
 
 
 
