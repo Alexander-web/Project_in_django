@@ -6,7 +6,7 @@ from django.views.generic import TemplateView
 from django.http import HttpResponse
 
 class MeasuresData(TemplateView):
-    def get(self,req,ssi_name,meas_name):
+    def get(self,req,meas_name,ssi_name):
         ssi=SSI.objects.get(name=ssi_name)
         meas=MeasureType.objects.get(name=meas_name)
         new_element=Measure_que.objects.create(ssi=ssi,meastype=meas)
@@ -23,6 +23,11 @@ class SSIList(TemplateView):
 class Remove_from_que(TemplateView):
     def get(self,req,name_remove):
         Measure_que.objects.get(id=name_remove).delete()
+        return redirect('ssi_list')
+
+class Remove_from_measure(TemplateView):
+    def get(self,req,name):
+        Measure.objects.get(id=name).delete()
         return redirect('ssi_list')
 
 class Baselist(TemplateView):
@@ -51,3 +56,12 @@ class Make_measures(TemplateView):
             new_measures=AcceptData.objects.create(measurement_data =measurement_data_current, xy=data_current)
             m.delete()
         return redirect('ssi_list')
+
+class Meas_info(TemplateView):
+    template_name = 'app/measure_info.html'
+    def get(self,req,mt_name,ssi_info_name,id_measure):
+        context={}
+        context['mt_name']=mt_name
+        context['ssi_name']=ssi_info_name
+        context['data']=AcceptData.objects.get(id=id_measure)
+        return render(req,self.template_name,context)

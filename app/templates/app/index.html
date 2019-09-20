@@ -20,7 +20,8 @@
                         <a href={% url 'ssi_detail' s.name %}>{{s.name}}</a>
                         <div class="small">Проведенные измерения:</div>
                         {% for j in s.meas.all %}
-                            <div class="small">{{j.meastype.name}}</div>
+                            <a href={% url 'meas_info' j.mea.name s.name j.id  %}><div class="small">{{j.mea.name}}</div></a>
+                            {% comment %} <div class="small">{{j.mea.name}}</div> {% endcomment %}
                         {% endfor %}
                     </td>
 
@@ -30,7 +31,7 @@
 
                     <td>
                         {% for meas in s.available_meas.all %}
-                            <a href={% url 'name_meas' s.name meas.name %}>{{meas.name}}</a> 
+                            <a href={% url 'name_meas' meas.name s.name%}>{{meas.name}}</a> 
                         {% endfor %}
                     </td>
                 </tr>
