@@ -4,6 +4,8 @@ body {
     font-weight: 300;
     font-size: 13px;
 }
-div{
-    font: red;
+button {
+    color:#6610f2;
+    background-color: rgb(184, 255, 20);
+    border-color: rgb(184, 255, 20);
 }
