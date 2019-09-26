@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from .models import *
 from django.views.generic import TemplateView
 from django.http import HttpResponse
+from .forms import SSIform, Typeform
 
 class MeasuresData(TemplateView):
     def get(self,req,meas_name,ssi_name):
@@ -29,6 +30,11 @@ class Remove_from_measure(TemplateView):
     def get(self,req,name):
         Measure.objects.get(id=name).delete()
         return redirect('ssi_list')
+
+class  Remove_from_ssilist(TemplateView):
+    def get(self,req,id_name):
+        SSI.objects.get(id=id_name).delete()
+        return redirect('create')
 
 class Baselist(TemplateView):
     template_name = 'app/base.html'
@@ -65,3 +71,20 @@ class Meas_info(TemplateView):
         context['ssi_name']=ssi_info_name
         context['data']=AcceptData.objects.get(id=id_measure)
         return render(req,self.template_name,context)
+
+
+def ssi_new(req):
+    template_name = 'app/create_config.html'
+    if req.method == "POST":
+        form = SSIform(req.POST)
+        if form.is_valid():
+            ssi = form.save(commit=False)
+            form.save()
+            return redirect('create')
+    else:
+        form = SSIform()
+        context = {}
+        context['form']=form
+        context['ssi']=SSI.objects.all()
+        return render(req,template_name,context)
+

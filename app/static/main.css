@@ -1,0 +1,28 @@
+body {
+    background-color: #f2f2f2;
+    font-family: "Helvetica";
+    font-weight: 300;
+    font-size: 13px;
+    background-image: url(images/white.png);
+}
+nav {
+    border-radius: 10px;
+}
+input {
+    border-radius: .25rem;
+    padding: .375rem .75rem;
+    border: 1px solid #ced4da;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+#row1 {
+    padding-top: 10px;
+}
+
+#btn1 {
+    background-color: rgb(94, 164, 255);
+    cursor: pointer;
+}
+#image {
+    border-radius: 30px;
+}
+
