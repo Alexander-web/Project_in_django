@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from .models import *
 from django.views.generic import TemplateView
 from django.http import HttpResponse
-from .forms import SSIform, Typeform
+from .forms import SSIform
 
 class MeasuresData(TemplateView):
     def get(self,req,meas_name,ssi_name):
@@ -78,8 +78,7 @@ def ssi_new(req):
     if req.method == "POST":
         form = SSIform(req.POST)
         if form.is_valid():
-            ssi = form.save(commit=False)
-            form.save()
+            ssi = form.save()
             return redirect('create')
     else:
         form = SSIform()
