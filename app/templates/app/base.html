@@ -1,4 +1,5 @@
 {% load staticfiles %}
+
 <!doctype html>
 <html lang="ru">
     <head>
@@ -33,7 +34,7 @@
                 {% block content %}
                 <div class="jumbotron">
                     <h1 class="display-3">Добро пожаловать!</h1>
-                    <p class="lead">Перед началом проведения работ необходимо зарегистрироваться!</p>
+                    <p class="lead">Перед началом проведения работ необходимо зарегистрироваться! (пока не работатет)</p>
                     <hr class="my-2">
                     <div class="row justify-content-center">
                         <form >
@@ -56,6 +57,7 @@
                     </div>
                 </div>
                 {% endblock%}
+
         </div>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     </body>
