@@ -49,6 +49,14 @@ class Baselist(TemplateView):
         # context['ssi_name'] = SSI.objects.all()
         return render(req, self.template_name,context)
 
+#Класс, отвечающий за представление help
+class Helplist(TemplateView):
+    template_name = 'app/help.html'
+    def get(self,req):
+        context={}
+        # context['ssi_name'] = SSI.objects.all()
+        return render(req, self.template_name,context)
+
 #Этот класс отвечает за представление информации о SSI из таблицы
 class SSIDetail(TemplateView):
     template_name = 'app/ssi_detail.html'

@@ -1,0 +1,53 @@
+{% extends 'app/base.html' %}
+{% block content %}
+{% load staticfiles %}
+
+<div class="row" id="ro2">
+                        <div class="col-6">
+                            <img id="image" src="{% static 'images/N5245A.jpg' %}" alt="logo" class='img-fluid' width='695' height='338'>
+                        </div>
+                        <div class="col">
+                            <table class="table table-bordered">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Параметр:</th>
+                                        <th>Значение:</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Диапазон частот: </th>
+                                        <td>10 МГц - 50 ГГц</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Уровень собственных шумов (дБм/Гц)</th>
+                                        <td>минус 110/минус 111</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Максимальная мощность на частотах 3 ГГц/20 ГГц (дБм): </th>
+                                        <td>+8–13/+5–10</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Выходная мощность: </th>
+                                        <td>13дБм</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Динамический диапазон:</th>
+                                        <td>124дБ</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Минимальный уровень шумов: </th>
+                                        <td>- 111 дБм</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Максимальная скорость (201 точка, 1 развертка):</th>
+                                        <td>5.5 мс</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+{% endblock content %}
