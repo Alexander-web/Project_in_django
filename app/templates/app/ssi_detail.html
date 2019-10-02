@@ -16,14 +16,15 @@
                 <th scope="row">{{ssi.name}}</th>
                 <td>{{ssi.input_frequency}}</td>
                 <td>{{ssi.output_frequency}}</td>
-                <td>
-                    {% for me in ssi.meas.all %}
-                    <p class="small">{{me.mea.name}}</p>
-                </td>
+                    <td>
+                        {% for me in ssi.meas.all %}
+                            <p class="small">{{me.mea.name}}</p>
+                        {% endfor %}
+                    </td>
             </tr>
         </tbody>
     </table>
 </div>
 
-{% endfor %}
+
 {% endblock content %}

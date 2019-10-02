@@ -7,9 +7,11 @@ from django.http import HttpResponse
 from .forms import SSIform
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
-from django.contrib.auth import logout
+# from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
+
 
 #Добавляет измерения в очередь
 class MeasuresData(TemplateView):
@@ -71,7 +73,8 @@ class SSIDetail(TemplateView):
         return render(req, self.template_name,context)
 
 #Класс, проделывающий измерения
-class Make_measures(TemplateView):
+class Make_measures(PermissionRequiredMixin,TemplateView):
+    permission_required = 'catalog.make_measures'
     def get(self,req):
         meas=Measure_que.objects.all()
         mea=Measure.objects.all()

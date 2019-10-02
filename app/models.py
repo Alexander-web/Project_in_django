@@ -29,7 +29,9 @@ class Measure_que(models.Model):                            # Класс оче�
     def __str__(self):
         return 'Имя SSI: {}, Тип измерения: {}, Время измерения: {}'.format(self.ssi, self.meastype, self.date_time)
 
-class Measure(models.Model):                                #Класс, собирающий информацию о имени SSI и типе измерения в нем для передачи этой информации в AcceptData
+class Measure(models.Model): 
+    class Meta:
+        permissions = (("make_measures", "проводит измерения"),)                                 #Класс, собирающий информацию о имени SSI и типе измерения в нем для передачи этой информации в AcceptData
     time = models.DateTimeField(auto_now_add = True)
     ssi = models.ForeignKey(SSI, on_delete = models.CASCADE,related_name='meas', verbose_name="Имя SSI")
     mea = models.ForeignKey(MeasureType, on_delete = models.CASCADE,related_name = 'measure_type',verbose_name="Тип измерения")

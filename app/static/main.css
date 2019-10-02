@@ -39,3 +39,14 @@ input {
 #p2 {
     margin-bottom: 0px;
 }
+
+#btninfo {
+    margin-left: 10px;
+    background-color: transparent;
+}
+#info {
+    font-size: 100%;
+    background-color: transparent;
+    color: rgb(31, 230, 91);
+    padding-top: 12px;
+}
