@@ -16,46 +16,30 @@
                     <img src="{% static 'images/python.svg' %}" alt="logo" class='img-fluid' width='100' height='100'>
                     <nav class="nav">
                         <div class="row">
-                            <div class="col-2">
+                            <div class="col-md-2">
                                 <li class="nav-item"><a class="nav-link active" href="{% url 'base_list' %}">Home</a></li>
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-3">
                                 <li class="nav-item"><a class="nav-link active" href={% url 'ssi_list' %}>Measurements</a></li>
                             </div>
-                            <div class="col-4">
+                            <div class="col-md-4">
                                 <li class="nav-item"><a class="nav-link active" href={% url 'create' %}>Create config</a></li>
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-3">
                                 <li class="nav-item"><a class="nav-link active" href={% url 'help_list' %}>Help</a></li>
                             </div>
                         </div>
                     </nav>
+                        {% if user.is_authenticated %}
+                            <li class="text-success">Пользователь: {{ user.get_username }}</li>
+                            <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>   
+                        {% else %}
+                            <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>   
+                        {% endif %} 
                 </nav>
                 {% block content %}
-                <div class="jumbotron">
-                    <h1 class="display-3">Добро пожаловать!</h1>
-                    <p class="lead">Перед началом проведения работ необходимо зарегистрироваться! (пока не работатет)</p>
-                    <hr class="my-2">
-                    <div class="row justify-content-center">
-                        <form >
-                            <div class="form-group ">
-                                <label for="formGroupExampleInput">Имя:</label>
-                                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Иван">
-                            </div>
-                            <div class="form-group">
-                                <label for="formGroupExampleInput2">Фамилия:</label>
-                                <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Петров">
-                            </div>
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Пароль:</label>
-                                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="******">
-                            </div>
-                            <p class="lead">
-                                <a class="btn btn-primary btn-lg" href="#!" role="button">Войти</a>
-                            </p>
-                        </form>               
-                    </div>
-                </div>
+                <h1>Вход успешно выполнен! </h1>
+                <p>Информацию о способах проведения измерений можно получить в разделе Help!</p>
                 {% endblock%}
 
         </div>

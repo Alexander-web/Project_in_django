@@ -3,42 +3,39 @@
 
 <div class="container-fluid">
     <div id="row1" class="row">
-            <div id= "col1" class="col-2">
+            <div id= "col1" class="col-md-2">
                 {% comment %} <form method="post" class="post-form" >{% csrf_token %}
                     {{ form.as_p}}
                     {{ form1.as_p}}
                     <button type="submit" class="save btn btn-default">Save</button> 
                 </form> {% endcomment %}
                 <form method="POST" class="post-form">{% csrf_token %}
-                    <div class="form-group" >
                         <label for="id_name">Имя SSI</label>
                         <input type="text" name="name" maxlength="50" required="" id="id_name" placeholder="SSI_1">                                    
                         <label for="id_input_frequency">Входная частота,Гц:</label>
                         <input type="number" name="input_frequency" required="" id="id_input_frequency" placeholder="28">
-                    </div>
                     <button id = "btn1" type="submit" class="save btn btn-primary">Добавить SSI</button>                   
                 </div>       
-                <div class="col-2">
-                    <div class="form-group">
+                <div class="col-md-2">
                         <label for="id_band_frequency">Полоса частот,Гц:</label>
                         <input type="number" name="band_frequency" required="" id="id_band_frequency" placeholder="34">                
                         <label for="id_output_frequency">Выходная частота,Гц:</label>
                         <input type="number" name="output_frequency" required="" id="id_output_frequency" placeholder="78">
-                    </div>
                 </div>
-                <div class="col-1">
+                <div class="col-md-1">
                     <label for="id_available_meas">Тип измерения:</label>
-                    <select class="custom-select" type="text" name="available_meas" required="" id="id_available_meas" multiple="">                        
+                    {% comment %} <select class="custom-select" type="text" name="available_meas" required="" id="id_available_meas" multiple="">                        
                         <option value="1">afc</option>
                         <option value="2">pos</option>
                         <option value="3">amam</option>
                         <option value="4">gd</option>
-                    </select>            
-                </div>
+                    </select>             {% endcomment %}
+                    <div id='div1'>{{ form.available_meas}}</div>
+            </div>
                 </form>
-        <div class="col" >
+        <div class="col-md" >
             <table class="table table-bordered">
-                <thead class="thead-light">
+                <thead class="thead-light"> 
                     <tr>
                         <th>Имя SSI</th>
                         <th>Входная частота, Гц</th>

@@ -3,7 +3,7 @@ body {
     font-family: "Helvetica";
     font-weight: 300;
     font-size: 13px;
-    background-image: url(/static/images/white.png);
+    /* background-image: url(/static/images/white.png); */
 }
 nav {
     border-radius: 10px;
@@ -26,7 +26,16 @@ input {
 #btn1 {
     background-color: rgb(94, 164, 255);
     cursor: pointer;
+    margin-top: 5px;
 }
 #image {
     border-radius: 30px;
+}
+
+#p1 {
+    margin-bottom: 0px;
+}
+
+#p2 {
+    margin-bottom: 0px;
 }

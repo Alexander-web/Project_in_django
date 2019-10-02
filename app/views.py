@@ -5,6 +5,11 @@ from .models import *
 from django.views.generic import TemplateView
 from django.http import HttpResponse
 from .forms import SSIform
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LogoutView
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 #Добавляет измерения в очередь
 class MeasuresData(TemplateView):
@@ -15,7 +20,7 @@ class MeasuresData(TemplateView):
         return redirect('ssi_list')
 
 #Отвечает за отрисовку общего листа со списком SSI
-class SSIList(TemplateView):
+class SSIList(LoginRequiredMixin,TemplateView):
     template_name = 'app/index.html'
     def get(self,req):
         context={}
@@ -42,7 +47,7 @@ class  Remove_from_ssilist(TemplateView):
         return redirect('create')
 
 #Этот класс отвечает за рендеринг домашней страницы
-class Baselist(TemplateView):
+class Baselist(LoginRequiredMixin,TemplateView):
     template_name = 'app/base.html'
     def get(self,req):
         context={}
@@ -90,6 +95,7 @@ class Meas_info(TemplateView):
         return render(req,self.template_name,context)
 
 #Представление (функция) отвечающя за взаимодействие с формой
+@login_required
 def ssi_new(req):
     template_name = 'app/create_config.html'
     if req.method == "POST":
@@ -103,4 +109,7 @@ def ssi_new(req):
         context['form']=form
         context['ssi']=SSI.objects.all()
         return render(req,template_name,context)
+
+
+
 

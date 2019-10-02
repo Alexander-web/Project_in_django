@@ -3,6 +3,11 @@ from django.db import models
 from django.utils import timezone
 import socket
 
+class Operator(models.Model):
+    name = models.CharField(max_length=50,verbose_name="Имя оператора")
+    surname = models.CharField(max_length=50,verbose_name="Фамилия оператора")
+    password=models.CharField(max_length=50,verbose_name="Пароль")
+
 class MeasureType(models.Model):                         #Тип измерерия АЧХ, НГВЗ, точка насыщения, АМ-АМ
     name = models.CharField(max_length=50,verbose_name="Тип измерения")
     def __str__(self):
@@ -40,7 +45,7 @@ class AcceptData(models.Model):                             # X-Y данные
 
 
 
-
+ 
 
 
 

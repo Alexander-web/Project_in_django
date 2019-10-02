@@ -1,5 +1,6 @@
 from django import forms
 from .models import SSI
+from django.contrib.auth.forms import UserCreationForm
 
 '''
 Класс отвечает за создание формы, где model = SSI показывает какой класс будет использоваться для создания формы,

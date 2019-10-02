@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 from .views import *
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     # path('',views.view_list, name='view_list'),
@@ -15,6 +17,8 @@ urlpatterns = [
     path('get/meastype_info/<slug:mt_name>/<slug:ssi_info_name>/<slug:id_measure>/', Meas_info.as_view(), name = 'meas_info'),
     path('create_SSI', views.ssi_new, name = 'create'),
     path('remove_from_ssilist/<slug:id_name>/', Remove_from_ssilist.as_view(), name = 'ssi_remove_ssilist'),
+    path('login/', views.LoginView.as_view(), name='login'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
 
 ]
 
