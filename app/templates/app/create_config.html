@@ -3,45 +3,37 @@
 
 <div class="container-fluid">
     <div id="row1" class="row">
-            <div id= "col1" class="col-md-2">
-                {% comment %} <form method="post" class="post-form" >{% csrf_token %}
-                    {{ form.as_p}}
-                    {{ form1.as_p}}
-                    <button type="submit" class="save btn btn-default">Save</button> 
-                </form> {% endcomment %}
-                <form method="POST" class="post-form">{% csrf_token %}
-                        <label for="id_name">Имя SSI</label>
-                        <input type="text" name="name" maxlength="50" required="" id="id_name" placeholder="SSI_1">                                    
-                        <label for="id_input_frequency">Входная частота,Гц:</label>
-                        <input type="number" name="input_frequency" required="" id="id_input_frequency" placeholder="28">
-                    <button id = "btn1" type="submit" class="save btn btn-primary">Добавить SSI</button>                   
-                </div>       
-                <div class="col-md-2">
-                        <label for="id_band_frequency">Полоса частот,Гц:</label>
-                        <input type="number" name="band_frequency" required="" id="id_band_frequency" placeholder="34">                
-                        <label for="id_output_frequency">Выходная частота,Гц:</label>
-                        <input type="number" name="output_frequency" required="" id="id_output_frequency" placeholder="78">
-                </div>
-                <div class="col-md-1">
-                    <label for="id_available_meas">Тип измерения:</label>
-                    {% comment %} <select class="custom-select" type="text" name="available_meas" required="" id="id_available_meas" multiple="">                        
-                        <option value="1">afc</option>
-                        <option value="2">pos</option>
-                        <option value="3">amam</option>
-                        <option value="4">gd</option>
-                    </select>             {% endcomment %}
-                    <div id='div1'>{{ form.available_meas}}</div>
+        <div id= "col1" class="col-md-2">
+            <form method="POST" class="post-form">{% csrf_token %}
+                <label class="d-flex flex-wrap align-content-start" for="id_name">Имя SSI:</label>
+                <input type="text" name="name" maxlength="50" required="" id="id_name" placeholder="SSI_1">                                    
+                <label for="id_input_frequency">Входная частота,ГГц:</label>
+                {% comment %} <input type="number" name="input_frequency" required="" id="id_input_frequency" placeholder="28"> {% endcomment %}
+                <div>{{ form.input_frequency}}</div>
+                <button id = "btn1" type="submit" class="save btn btn-primary">Добавить SSI</button>                   
+            </div>       
+            <div class="col-md-2">
+                <label for="id_band_frequency">Полоса частот,ГГц:</label>
+                <input type="number" name="band_frequency" required="" id="id_band_frequency" placeholder="34">                
+                <label for="id_output_frequency">Выходная частота,ГГц:</label>
+                {% comment %} <input type="number" name="output_frequency" required="" id="id_output_frequency" placeholder="78"> {% endcomment %}
+                <div>{{ form.output_frequency}}</div>
             </div>
-                </form>
+            <div class="col-md-1">
+                <label for="id_available_meas">Тип измерения:</label>
+                <div id='div1'>{{ form.available_meas}}</div>
+        </div>
+            </form>
         <div class="col-md" >
             <table class="table table-bordered">
                 <thead class="thead-light"> 
                     <tr>
                         <th>Имя SSI</th>
-                        <th>Входная частота, Гц</th>
-                        <th>Выходная частота, Гц</th>
-                        <th>Полоса частот, Гц</th>
+                        <th>Входная частота, ГГц</th>
+                        <th>Выходная частота, ГГц</th>
+                        <th>Полоса частот, ГГц</th>
                         <th>Выбранные измерения</th>
+                        <th>Частотный диапазон</th>
                         <th>Действия</th>
                     </tr>
                 </thead>
@@ -51,17 +43,28 @@
                             <td>{{s.name}}</td>
                             <td>{{s.input_frequency}}</td>
                             <td>{{s.output_frequency}}</td>
-                            <td>{{s.band_frequency}}</td>                                            
+                            <td>{{s.band_frequency}}</td>                                      
                             <td>
                                 {% for meas in s.available_meas.all %}
                                     {{meas.name}}
                                 {% endfor %}
                             </td>
+                            <td>{{s.freqrange}}</td>  
                             <td><a href={% url 'ssi_remove_ssilist' s.id %} class="btn btn-danger">Delete</a></td>
                         </tr>
                     {% endfor %}
-                </tbody>
+                </tbody>              
             </table>
+            <div class="row d-flex justify-content-end">
+                <div class="col-md-4">
+                    <div class="input-group ">
+                        <input type="text" class="form-control" placeholder="K/Ku" aria-label="" aria-describedby="basic-addon1">
+                        <div class="input-group-append">
+                            <button class="btn btn-success" type="button">Сортировать</button>
+                        </div>
+                    </div>
+                </div>
+            </div>              
         </div>
     </div>
 </div>

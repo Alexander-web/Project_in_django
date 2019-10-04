@@ -3,10 +3,12 @@ from django.db import models
 from django.utils import timezone
 import socket
 
-class Operator(models.Model):
-    name = models.CharField(max_length=50,verbose_name="Имя оператора")
-    surname = models.CharField(max_length=50,verbose_name="Фамилия оператора")
-    password=models.CharField(max_length=50,verbose_name="Пароль")
+class FreqRange(models.Model):
+    input_range = models.CharField(("Входной диапазон"), max_length=50)
+    output_range = models.CharField(("Выходной диапазон"), max_length=50)
+
+    def __str__(self):
+        return f'{str(self.input_range)}/{str(self.output_range)}'
 
 class MeasureType(models.Model):                         #Тип измерерия АЧХ, НГВЗ, точка насыщения, АМ-АМ
     name = models.CharField(max_length=50,verbose_name="Тип измерения")
@@ -15,9 +17,10 @@ class MeasureType(models.Model):                         #Тип измерер�
 
 class SSI(models.Model):                                    #Конфигурации
     name = models.CharField('Имя SSI',max_length=50)                  
-    input_frequency = models.IntegerField('Входная частота')
-    output_frequency = models.IntegerField('Выходная частота')
-    band_frequency = models.IntegerField('Полоса частот')
+    input_frequency = models.FloatField('Входная частота')
+    output_frequency = models.FloatField('Выходная частота')
+    band_frequency = models.FloatField('Полоса частот')
+    freqrange = models.ForeignKey("FreqRange", verbose_name=("Частотный диапазон"), on_delete=models.CASCADE)
     available_meas= models.ManyToManyField(MeasureType, related_name='ssi',verbose_name="Тип измерения")
     def __str__(self):
         return self.name
@@ -47,7 +50,7 @@ class AcceptData(models.Model):                             # X-Y данные
 
 
 
- 
+
 
 
 

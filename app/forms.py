@@ -10,5 +10,5 @@ fields говорит, какие поля использовать для эт�
 class SSIform(forms.ModelForm):
     class Meta:
         model = SSI
-        fields = ('name', 'input_frequency','output_frequency','band_frequency','available_meas')
-
+        # exclude = ['freqrange']
+        fields = ('name', 'input_frequency','output_frequency','band_frequency','available_meas',)
