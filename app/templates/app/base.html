@@ -35,7 +35,7 @@
                             <li id ='info'class="badge badge-success">Пользователь: {{ user.get_username }}</li>
                             <a id ='btninfo' href="{% url 'logout'%}?next={{request.path}}" class="btn btn-info">Logout</a>  
                         {% else %}
-                            {% comment %} <button ><a href={% url 'login'%} type="button" class="btn btn-info">Login</a></button>   {% endcomment %}
+                            <a id ='btninfo1' href="{% url 'login'%}?next={{request.path}}" type="button" class="btn btn-info">Login</a>
                         {% endif %} 
                     </ul>
                     <nav class="nav ">

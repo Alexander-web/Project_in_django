@@ -10,5 +10,7 @@ fields говорит, какие поля использовать для эт�
 class SSIform(forms.ModelForm):
     class Meta:
         model = SSI
-        # exclude = ['freqrange']
         fields = ('name', 'input_frequency','output_frequency','band_frequency','available_meas',)
+
+class Form_for_choice(forms.Form):
+    choice=forms.CharField(required=False,widget=forms.Textarea())

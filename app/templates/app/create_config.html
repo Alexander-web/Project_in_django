@@ -31,7 +31,7 @@
                         <th>Имя SSI</th>
                         <th>Входная частота, ГГц</th>
                         <th>Выходная частота, ГГц</th>
-                        <th>Полоса частот, ГГц</th>
+                        <th>Полоса частот, МГц</th>
                         <th>Выбранные измерения</th>
                         <th>Частотный диапазон</th>
                         <th>Действия</th>
@@ -54,15 +54,21 @@
                         </tr>
                     {% endfor %}
                 </tbody> 
-                <div class="input-group-append">
-                    <select class="custom-select" >
-                        <option selected>Выберете частотный диапазон для сортировки!</option>
-                        {% for i in ssi %}
-                            <option value={{i.freqrange.all.get}}>{{i.freqrange.all.get}}</option>
-                        {% endfor %}
-                    </select>
-                    <a href='#!' class="btn btn-primary" >Сортировать</a>
-                </div>               
+                {% comment %} <form method="POST" class="post-form">{% csrf_token %}
+                    <div class="input-group-append">
+                        <select class="custom-select" >
+                            <option selected>Выберете частотный диапазон для сортировки!</option>
+                            {% for i in ssi %}
+                                <option value={{i.freqrange.all.get}}>{{i.freqrange.all.get}}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="save btn btn-default">Сортировать</button>
+                    </div> 
+                </form>               {% endcomment %}
+                    <form method="POST" class="post-form">{% csrf_token %}
+                        {{ form_freq.as_p }}
+                        <button type="submit" class="save btn btn-default">Save</button>
+                    </form>
             </table>            
         </div>
     </div>

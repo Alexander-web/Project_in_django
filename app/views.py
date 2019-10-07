@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from .models import *
 from django.views.generic import TemplateView
 from django.http import HttpResponse
-from .forms import SSIform
+from .forms import *
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
 # from django.contrib.auth import logout
@@ -152,18 +152,23 @@ def ssi_new(req):
         context['ssi']=SSI.objects.all()
         return render(req,template_name,context)
 
+#Функция отвечает за форму сортировки для частотных диапазонов
+def freqband_choice(req):
+    template_name = 'app/create_config.html'
+    form=Form_for_choice()
+    if req.method == "POST":
+        form = Form_for_choice(req.POST)
+        if form.is_valid():
+            freq = form.save()
+            return redirect('create')
+        else:
+            form = Form_for_choice()
+            context = {}
+            context['form_freq']=form
+            return render(req,template_name,context)
 
-# Класс, отвечающий за сортировку элементов таблицы по частотным диапазонам
 #Модель, отвечающая за переопределение стандартного менеджера модели FreqRange
-class Sort(TemplateView):
-    template_name = "app/create_config"
-    def get(self,req,value):
-        class Sortfreq(models.Manager):
-            def get_queryset(self):
-                return super(Sortfreq, self).get_queryset().filter(author='Roald Dahl')
-        context={}
-        context['freq']=SSI.objects.all()
-        return render(req,template_name,context)
+
 
 
 
