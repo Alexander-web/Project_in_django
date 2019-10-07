@@ -8,21 +8,21 @@
                 <label class="d-flex flex-wrap align-content-start" for="id_name">Имя SSI:</label>
                 <input type="text" name="name" maxlength="50" required="" id="id_name" placeholder="SSI_1">                                    
                 <label for="id_input_frequency">Входная частота,ГГц:</label>
-                {% comment %} <input type="number" name="input_frequency" required="" id="id_input_frequency" placeholder="28"> {% endcomment %}
-                <div>{{ form.input_frequency}}</div>
+                <input type="number" name="input_frequency" required="" id="id_input_frequency" placeholder="28">
+                {% comment %} <div>{{ form.input_frequency}}</div> {% endcomment %}
                 <button id = "btn1" type="submit" class="save btn btn-primary">Добавить SSI</button>                   
             </div>       
             <div class="col-md-2">
                 <label for="id_band_frequency">Полоса частот,ГГц:</label>
                 <input type="number" name="band_frequency" required="" id="id_band_frequency" placeholder="34">                
                 <label for="id_output_frequency">Выходная частота,ГГц:</label>
-                {% comment %} <input type="number" name="output_frequency" required="" id="id_output_frequency" placeholder="78"> {% endcomment %}
-                <div>{{ form.output_frequency}}</div>
+                <input type="number" name="output_frequency" required="" id="id_output_frequency" placeholder="78">
+                {% comment %} <div>{{ form.output_frequency}}</div> {% endcomment %}
             </div>
             <div class="col-md-1">
                 <label for="id_available_meas">Тип измерения:</label>
                 <div id='div1'>{{ form.available_meas}}</div>
-        </div>
+        </div>            
             </form>
         <div class="col-md" >
             <table class="table table-bordered">
@@ -49,24 +49,24 @@
                                     {{meas.name}}
                                 {% endfor %}
                             </td>
-                            <td>{{s.freqrange}}</td>  
+                            <td>{{s.freqrange.all.get}}</td>  
                             <td><a href={% url 'ssi_remove_ssilist' s.id %} class="btn btn-danger">Delete</a></td>
                         </tr>
                     {% endfor %}
-                </tbody>              
-            </table>
-            <div class="row d-flex justify-content-end">
-                <div class="col-md-4">
-                    <div class="input-group ">
-                        <input type="text" class="form-control" placeholder="K/Ku" aria-label="" aria-describedby="basic-addon1">
-                        <div class="input-group-append">
-                            <button class="btn btn-success" type="button">Сортировать</button>
-                        </div>
-                    </div>
-                </div>
-            </div>              
+                </tbody> 
+                <div class="input-group-append">
+                    <select class="custom-select" >
+                        <option selected>Выберете частотный диапазон для сортировки!</option>
+                        {% for i in ssi %}
+                            <option value={{i.freqrange.all.get}}>{{i.freqrange.all.get}}</option>
+                        {% endfor %}
+                    </select>
+                    <a href='#!' class="btn btn-primary" >Сортировать</a>
+                </div>               
+            </table>            
         </div>
     </div>
 </div>
+
 
 {% endblock content %}

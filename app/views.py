@@ -11,6 +11,7 @@ from django.contrib.auth.views import LogoutView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.db import models
 
 #Добавляет измерения в очередь
 class MeasuresData(TemplateView):
@@ -103,47 +104,46 @@ def ssi_new(req):
     if req.method == "POST":
         form = SSIform(req.POST)
         if form.is_valid():
-            ssi = form.save(commit=False)                  
-            if ssi.input_frequency >= 1.4 and ssi.input_frequency <= 1.9:
+            ssi = form.save()
+            if ssi.input_frequency >= 0 and ssi.input_frequency <= 1.8:
                 inputfreq="L"
-            elif ssi.input_frequency >= 1.9 and ssi.input_frequency <= 2.7:
+            elif ssi.input_frequency >= 1.9 and ssi.input_frequency <= 3.3:
                 inputfreq="S"
-            elif ssi.input_frequency >= 3.4 and ssi.input_frequency <= 5.25:
+            elif ssi.input_frequency >= 3.4 and ssi.input_frequency <= 5.724:
                 inputfreq="C-low"
-            elif ssi.input_frequency >= 5.725 and ssi.input_frequency <= 7.075:
+            elif ssi.input_frequency >= 5.725 and ssi.input_frequency <= 7.24:
                 inputfreq="C-high"
-            elif ssi.input_frequency >= 7.25 and ssi.input_frequency <= 8.4:
+            elif ssi.input_frequency >= 7.25 and ssi.input_frequency <= 10.6:
                 inputfreq="X"
-            elif ssi.input_frequency >= 10.7 and ssi.input_frequency <= 14.8:
+            elif ssi.input_frequency >= 10.7 and ssi.input_frequency <= 15.3:
                 inputfreq="Ku"
-            elif ssi.input_frequency >= 15.4 and ssi.input_frequency <= 27.5:
+            elif ssi.input_frequency >= 15.4 and ssi.input_frequency <= 26:
                 inputfreq="K"
-            elif ssi.input_frequency >= 27 and ssi.input_frequency <= 50:
+            elif ssi.input_frequency >= 27 and ssi.input_frequency <= 64:
                 inputfreq="Ka"
             elif ssi.input_frequency >= 65 and ssi.input_frequency <= 110:
                 inputfreq="W" 
-
-            if ssi.output_frequency >= 1.4 and ssi.output_frequency <= 1.9:
+                
+            if ssi.output_frequency >= 0 and ssi.output_frequency <= 1.8:
                 outputfreq="L"
-            elif ssi.output_frequency >= 1.9 and ssi.output_frequency <= 2.7:
+            elif ssi.output_frequency >= 1.9 and ssi.output_frequency <= 3.3:
                 outputfreq="S"
-            elif ssi.output_frequency >= 3.4 and ssi.output_frequency <= 5.25:
+            elif ssi.output_frequency >= 3.4 and ssi.output_frequency <= 5.724:
                 outputfreq="C-low"
-            elif ssi.output_frequency >= 5.725 and ssi.output_frequency <= 7.075:
+            elif ssi.output_frequency >= 5.725 and ssi.output_frequency <= 7.24:
                 outputfreq="C-high"
-            elif ssi.output_frequency >= 7.25 and ssi.output_frequency <= 8.4:
+            elif ssi.output_frequency >= 7.25 and ssi.output_frequency <= 10.6:
                 outputfreq="X"
-            elif ssi.output_frequency >= 10.7 and ssi.output_frequency <= 14.8:
+            elif ssi.output_frequency >= 10.7 and ssi.output_frequency <= 15.3:
                 outputfreq="Ku"
-            elif ssi.output_frequency >= 15.4 and ssi.output_frequency <= 27.5:
+            elif ssi.output_frequency >= 15.4 and ssi.output_frequency <= 27.4:
                 outputfreq="K"
-            elif ssi.output_frequency >= 27 and ssi.output_frequency <= 50:
+            elif ssi.output_frequency >= 27.5 and ssi.output_frequency <= 64:
                 outputfreq="Ka"
             elif ssi.output_frequency >= 65 and ssi.output_frequency <= 110:
-                outputfreq="W"                                                         
-            new_freqrange=FreqRange.objects.create(input_range=inputfreq, output_range=outputfreq)
-            ssi.freqrange=new_freqrange
-            form.save()
+                outputfreq="W"
+            new_ssi_element=ssi
+            new_freqrange=FreqRange.objects.create(input_range=inputfreq, output_range=outputfreq, ssi_element=new_ssi_element)
             return redirect('create')
     else:
         form = SSIform()
@@ -151,6 +151,35 @@ def ssi_new(req):
         context['form']=form
         context['ssi']=SSI.objects.all()
         return render(req,template_name,context)
+
+
+# Класс, отвечающий за сортировку элементов таблицы по частотным диапазонам
+#Модель, отвечающая за переопределение стандартного менеджера модели FreqRange
+class Sort(TemplateView):
+    template_name = "app/create_config"
+    def get(self,req,value):
+        class Sortfreq(models.Manager):
+            def get_queryset(self):
+                return super(Sortfreq, self).get_queryset().filter(author='Roald Dahl')
+        context={}
+        context['freq']=SSI.objects.all()
+        return render(req,template_name,context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
