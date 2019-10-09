@@ -19,7 +19,7 @@ urlpatterns = [
     path('remove_from_ssilist/<slug:id_name>/', Remove_from_ssilist.as_view(), name = 'ssi_remove_ssilist'),
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
-    # path('sort/<slug:value>/', Sort.as_view(), name='select'),
+    path('sort/',views.freq_sort, name='filter'),
 
 ]
 

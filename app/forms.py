@@ -12,5 +12,5 @@ class SSIform(forms.ModelForm):
         model = SSI
         fields = ('name', 'input_frequency','output_frequency','band_frequency','available_meas',)
 
-class Form_for_choice(forms.Form):
-    choice=forms.CharField(required=False,widget=forms.Textarea())
+class Formfilter(forms.Form):
+    choice=forms.CharField(widget=forms.Select())

@@ -24,7 +24,16 @@
                 <div id='div1'>{{ form.available_meas}}</div>
         </div>            
             </form>
-        <div class="col-md" >
+        <div class="col-md-7 " >    
+            <form action = "sort/" method="POST" class="post-form "> {% csrf_token %}
+                <select id = 'form_select' name="choice" id="id_choice" class="custom-select" >
+                {% for i in freq %}
+                    <option value={{i}}>{{i}}</option>
+                {% endfor %}
+                </select>
+                {% comment %} <div >{{formfreq.choice}}</<select> {% endcomment %}
+                <button type="submit" class="save btn btn btn-primary">Сортировать</button>
+            </form> 
             <table class="table table-bordered">
                 <thead class="thead-light"> 
                     <tr>
@@ -54,25 +63,9 @@
                         </tr>
                     {% endfor %}
                 </tbody> 
-                {% comment %} <form method="POST" class="post-form">{% csrf_token %}
-                    <div class="input-group-append">
-                        <select class="custom-select" >
-                            <option selected>Выберете частотный диапазон для сортировки!</option>
-                            {% for i in ssi %}
-                                <option value={{i.freqrange.all.get}}>{{i.freqrange.all.get}}</option>
-                            {% endfor %}
-                        </select>
-                        <button type="submit" class="save btn btn-default">Сортировать</button>
-                    </div> 
-                </form>               {% endcomment %}
-                    <form method="POST" class="post-form">{% csrf_token %}
-                        {{ form_freq.as_p }}
-                        <button type="submit" class="save btn btn-default">Save</button>
-                    </form>
-            </table>            
+            </table>         
         </div>
     </div>
 </div>
-
 
 {% endblock content %}

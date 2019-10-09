@@ -143,28 +143,36 @@ def ssi_new(req):
             elif ssi.output_frequency >= 65 and ssi.output_frequency <= 110:
                 outputfreq="W"
             new_ssi_element=ssi
-            new_freqrange=FreqRange.objects.create(input_range=inputfreq, output_range=outputfreq, ssi_element=new_ssi_element)
+            new_freqrange=FreqRange.objects.create(input_range=inputfreq, output_range=outputfreq, ssi_element=new_ssi_element, name="{}/{}".format(inputfreq,outputfreq))
             return redirect('create')
     else:
+        frm = Formfilter()
         form = SSIform()
         context = {}
         context['form']=form
+        # context['freq']=FreqRange.objects.values_list('input_range','output_range').distinct()
+        context['freq']=FreqRange.objects.order_by().values_list('name', flat=True).distinct()
+        context['formfreq']=frm
         context['ssi']=SSI.objects.all()
         return render(req,template_name,context)
 
-#Функция отвечает за форму сортировки для частотных диапазонов
-def freqband_choice(req):
+#Класс отвечает за форму для сортировки частотных диапазонов
+
+def freq_sort(req):
     template_name = 'app/create_config.html'
-    form=Form_for_choice()
     if req.method == "POST":
-        form = Form_for_choice(req.POST)
+        form = Formfilter(req.POST)
         if form.is_valid():
-            freq = form.save()
+            pass
+            # sort=FreqRange.custom_manager(form)
+            # context = {}
+            # context['sort']=sort
+            # return render(req,template_name,context)
             return redirect('create')
         else:
-            form = Form_for_choice()
+            form = Formfilter()
             context = {}
-            context['form_freq']=form
+            context['formfreq']=form
             return render(req,template_name,context)
 
 #Модель, отвечающая за переопределение стандартного менеджера модели FreqRange
@@ -183,9 +191,7 @@ def freqband_choice(req):
 
 
 
-
-
-
+        # context['data_for_form']=Form_for_choice.objects.order_by().values_list('input_range','output_range', flat=True).distinct()
 
 
 

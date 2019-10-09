@@ -52,3 +52,7 @@ input {
     color: rgb(31, 230, 91);
     padding-top: 12px;
 }
+
+#form_select {
+    width: 700px;
+}
