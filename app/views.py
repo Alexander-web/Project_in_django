@@ -153,7 +153,7 @@ def ssi_new(req):
         # context['freq']=FreqRange.objects.values_list('input_range','output_range').distinct()
         context['freq']=FreqRange.objects.order_by().values_list('name', flat=True).distinct()
         context['formfreq']=frm
-        context['ssi']=SSI.objects.all()
+        context['Freqmodel']=FreqRange.objects.all()
         return render(req,template_name,context)
 
 #Класс отвечает за форму для сортировки частотных диапазонов
@@ -161,18 +161,21 @@ def ssi_new(req):
 def freq_sort(req):
     template_name = 'app/create_config.html'
     if req.method == "POST":
-        form = Formfilter(req.POST)
-        if form.is_valid():
-            pass
-            # sort=FreqRange.custom_manager(form)
-            # context = {}
-            # context['sort']=sort
-            # return render(req,template_name,context)
-            return redirect('create')
-        else:
-            form = Formfilter()
+        frm = Formfilter(req.POST)
+        if frm.is_valid():
+            freq=frm.cleaned_data['choice']
+            sort=FreqRange.custom_manager.get_queryset(freq)
             context = {}
-            context['formfreq']=form
+            form = SSIform()
+            context['form']=form
+            context['Freqmodel']=sort
+            context['freq']=FreqRange.objects.order_by().values_list('name', flat=True).distinct()
+            return render(req,template_name,context)
+            # return redirect('create')
+        else:
+            frm = Formfilter()
+            context = {}
+            context['formfreq']=frm
             return render(req,template_name,context)
 
 #Модель, отвечающая за переопределение стандартного менеджера модели FreqRange

@@ -5,10 +5,9 @@ import socket
 
 #Менеджер моделей, для FreqRange
 class FreqRangeManager(models.Manager):
-    def get_queryset(self,form):
-        return super(FreqRangeManager, self).get_queryset().filter(name=form)
+    def get_queryset(self,freq):
+        return super(FreqRangeManager, self).get_queryset().filter(name=freq)
 
-custom_manager=FreqRangeManager()
 
 class MeasureType(models.Model):                         #Тип измерерия АЧХ, НГВЗ, точка насыщения, АМ-АМ
     name = models.CharField(max_length=50,verbose_name="Тип измерения")
@@ -29,6 +28,8 @@ class FreqRange(models.Model):
     output_range = models.CharField(("Выходной диапазон"), max_length=50)
     ssi_element =  models.ForeignKey(SSI, on_delete = models.CASCADE,related_name = 'freqrange')
     name=models.CharField(("Имя диапазона"), max_length=50)
+    objects=models.Manager()
+    custom_manager=FreqRangeManager()
     def __str__(self):
         return f'{str(self.input_range)}/{str(self.output_range)}'
 

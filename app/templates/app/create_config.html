@@ -13,7 +13,7 @@
                 <button id = "btn1" type="submit" class="save btn btn-primary">Добавить SSI</button>                   
             </div>       
             <div class="col-md-2">
-                <label for="id_band_frequency">Полоса частот,ГГц:</label>
+                <label for="id_band_frequency">Полоса частот,МГц:</label>
                 <input type="number" name="band_frequency" required="" id="id_band_frequency" placeholder="34">                
                 <label for="id_output_frequency">Выходная частота,ГГц:</label>
                 <input type="number" name="output_frequency" required="" id="id_output_frequency" placeholder="78">
@@ -25,15 +25,16 @@
         </div>            
             </form>
         <div class="col-md-7 " >    
-            <form action = "sort/" method="POST" class="post-form "> {% csrf_token %}
+            <form action = "filter/" method="POST" class="post-form "> {% csrf_token %}
                 <select id = 'form_select' name="choice" id="id_choice" class="custom-select" >
+                <option selected>Все диапазоны</option>
                 {% for i in freq %}
                     <option value={{i}}>{{i}}</option>
                 {% endfor %}
                 </select>
-                {% comment %} <div >{{formfreq.choice}}</<select> {% endcomment %}
+                {% comment %} <div >{{formfreq.choice}}</div> {% endcomment %}
                 <button type="submit" class="save btn btn btn-primary">Сортировать</button>
-            </form> 
+            </form>  
             <table class="table table-bordered">
                 <thead class="thead-light"> 
                     <tr>
@@ -47,10 +48,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for s in ssi %}
+                    {% for i in Freqmodel.all %}
                         <tr>
-                            <td>{{s.name}}</td>
-                            <td>{{s.input_frequency}}</td>
+                            <td>{{i.ssi_element.name}}</td>
+                            <td>{{i.ssi_element.input_frequency}}</td>
+                            <td>{{i.ssi_element.output_frequency}}</td>
+                            <td>{{i.ssi_element.band_frequency}}</td>
+                            <td>
+                            {% for meas in i.ssi_element.available_meas.all %}
+                                {{meas.name}}
+                            {% endfor %}
+                            </td>
+                            <td>{{i.name}}</td>
+                            <td><a href={% url 'ssi_remove_ssilist' i.ssi_element.id %} class="btn btn-danger">Delete</a></td> 
+                            {% comment %} Доступ через SSI к SSI {% endcomment %}
+                            {% comment %} <td>{{s.input_frequency}}</td>
                             <td>{{s.output_frequency}}</td>
                             <td>{{s.band_frequency}}</td>                                      
                             <td>
@@ -59,7 +71,7 @@
                                 {% endfor %}
                             </td>
                             <td>{{s.freqrange.all.get}}</td>  
-                            <td><a href={% url 'ssi_remove_ssilist' s.id %} class="btn btn-danger">Delete</a></td>
+                            <td><a href={% url 'ssi_remove_ssilist' s.id %} class="btn btn-danger">Delete</a></td> {% endcomment %}
                         </tr>
                     {% endfor %}
                 </tbody> 
@@ -67,5 +79,5 @@
         </div>
     </div>
 </div>
-
+{{sort}}
 {% endblock content %}
