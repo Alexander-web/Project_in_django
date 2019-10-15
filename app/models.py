@@ -8,14 +8,13 @@ class FreqRangeManager(models.Manager):
     def get_queryset(self,freq):
         return super(FreqRangeManager, self).get_queryset().filter(name=freq)
 
-
 class MeasureType(models.Model):                         #Тип измерерия АЧХ, НГВЗ, точка насыщения, АМ-АМ
     name = models.CharField(max_length=50,verbose_name="Тип измерения")
     def __str__(self):
         return self.name
 
 class SSI(models.Model):                                    #Конфигурации
-    name = models.CharField('Имя SSI',max_length=50)                  
+    name = models.CharField('Имя SSI',max_length=50, unique=True)                  
     input_frequency = models.FloatField('Входная частота')
     output_frequency = models.FloatField('Выходная частота')
     band_frequency = models.FloatField('Полоса частот')

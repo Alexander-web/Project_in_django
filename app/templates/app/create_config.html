@@ -25,16 +25,6 @@
         </div>            
             </form>
         <div class="col-md-7 " >    
-            <form action = "filter/" method="POST" class="post-form "> {% csrf_token %}
-                <select id = 'form_select' name="choice" id="id_choice" class="custom-select" >
-                <option selected>Все диапазоны</option>
-                {% for i in freq %}
-                    <option value={{i}}>{{i}}</option>
-                {% endfor %}
-                </select>
-                {% comment %} <div >{{formfreq.choice}}</div> {% endcomment %}
-                <button type="submit" class="save btn btn btn-primary">Сортировать</button>
-            </form>  
             <table class="table table-bordered">
                 <thead class="thead-light"> 
                     <tr>
@@ -79,5 +69,5 @@
         </div>
     </div>
 </div>
-{{sort}}
+{{chek}}
 {% endblock content %}

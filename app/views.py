@@ -28,6 +28,8 @@ class SSIList(LoginRequiredMixin,TemplateView):
         context={}
         context['ssi'] = SSI.objects.all()
         context['planed_measure'] = Measure_que.objects.all()
+        context['freq']=FreqRange.objects.order_by().values_list('name', flat=True).distinct()
+        context['Freqmodel']=FreqRange.objects.all()
         return render(req, self.template_name,context)
 
 #Удаляет запланированные измерения из очереди
@@ -97,6 +99,12 @@ class Meas_info(TemplateView):
         context['data']=AcceptData.objects.get(id=id_measure)
         return render(req,self.template_name,context)
 
+class Meas_graph(TemplateView):
+    template_name = 'app/measure_graph.html'
+    def get(self,req):
+        context={}
+        return render(req,self.template_name,context)
+
 #Представление (функция) отвечающя за взаимодействие с формой
 @login_required
 def ssi_new(req):
@@ -146,37 +154,50 @@ def ssi_new(req):
             new_freqrange=FreqRange.objects.create(input_range=inputfreq, output_range=outputfreq, ssi_element=new_ssi_element, name="{}/{}".format(inputfreq,outputfreq))
             return redirect('create')
     else:
-        frm = Formfilter()
         form = SSIform()
         context = {}
         context['form']=form
         # context['freq']=FreqRange.objects.values_list('input_range','output_range').distinct()
-        context['freq']=FreqRange.objects.order_by().values_list('name', flat=True).distinct()
-        context['formfreq']=frm
         context['Freqmodel']=FreqRange.objects.all()
         return render(req,template_name,context)
 
 #Класс отвечает за форму для сортировки частотных диапазонов
 
+# def freq_sort(req):
+#     template_name = 'app/create_config.html'
+#     if req.method == "POST":
+#         frm = Formfilter(req.POST)
+#         if frm.is_valid():
+#             freq=frm.cleaned_data['choice']
+#             sort=FreqRange.custom_manager.get_queryset(freq)
+#             context = {}
+#             form = SSIform()
+#             context['form']=form
+#             context['Freqmodel']=sort
+#             context['freq']=FreqRange.objects.order_by().values_list('name', flat=True).distinct()
+#             context['chek']=freq
+#             if frm.cleaned_data['choice'] == 'all':
+#                 return redirect('create')
+#             else:
+#                 return render(req,template_name,context)
+#             # return redirect('create')
+
 def freq_sort(req):
-    template_name = 'app/create_config.html'
+    template_name = 'app/filter.html'
     if req.method == "POST":
         frm = Formfilter(req.POST)
         if frm.is_valid():
             freq=frm.cleaned_data['choice']
             sort=FreqRange.custom_manager.get_queryset(freq)
             context = {}
-            form = SSIform()
-            context['form']=form
+            context['planed_measure'] = Measure_que.objects.all()
             context['Freqmodel']=sort
             context['freq']=FreqRange.objects.order_by().values_list('name', flat=True).distinct()
-            return render(req,template_name,context)
+            if frm.cleaned_data['choice'] == 'all':
+                return redirect('ssi_list')
+            else:
+                return render(req,template_name,context)
             # return redirect('create')
-        else:
-            frm = Formfilter()
-            context = {}
-            context['formfreq']=frm
-            return render(req,template_name,context)
 
 #Модель, отвечающая за переопределение стандартного менеджера модели FreqRange
 

@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'web_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql', 
-        'NAME': 'Data_base_for_measures',
+        'NAME': 'Data_base_for_measure',
         'USER': 'postgres',
         'PASSWORD': 'django34',
         'HOST': 'localhost',

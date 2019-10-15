@@ -19,7 +19,8 @@ urlpatterns = [
     path('remove_from_ssilist/<slug:id_name>/', Remove_from_ssilist.as_view(), name = 'ssi_remove_ssilist'),
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
-    path('filter/',views.freq_sort, name='filter'),
+    path('get/filter/',views.freq_sort, name='filter'),
+    path('get/meastype_info/graph', Meas_graph.as_view(), name = 'meas_graph'),
 
 ]
 
