@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db import models
+import json
 
 #Добавляет измерения в очередь
 class MeasuresData(TemplateView):
@@ -101,9 +102,51 @@ class Meas_info(TemplateView):
 
 class Meas_graph(TemplateView):
     template_name = 'app/measure_graph.html'
-    def get(self,req):
-        context={}
-        return render(req,self.template_name,context)
+    def get(self,req,id_data,meas_type):
+        x=[]
+        y=[]
+        x1={}
+        y1={}
+        data=AcceptData.objects.get(id=id_data)
+        parse_data=data.xy
+        parse_data=parse_data.replace(',', '.')
+        parse_data=parse_data[0:parse_data.__len__()-2]
+        parse=parse_data.split(';')
+        if (meas_type =='afc') or (meas_type =='gd'):
+            f0=parse.pop(0)
+            f0=f0.split(':')
+            f1=f0[1]
+            for i in parse:
+                xy = i.split(':')
+                x.append(float(xy[0]))
+                y.append(float(xy[1]))
+            x1.update({"x":x})
+            y1.update({"y":y})
+        else:
+            for i in parse:
+                xy = i.split(':')
+                x.append(float(xy[0]))
+                y.append(float(xy[1]))
+            x1.update({"x":x})
+            y1.update({"y":y})
+        j_x=json.dumps(x1)
+        with open("data_file_x.json", "w") as write_file:
+            json.dump(j_x, write_file)
+        j_y=json.dumps(y1)
+        with open("data_file_y.json", "w") as write_file:
+            json.dump(j_y, write_file)
+        json_string_x = json.dumps(j_x)
+        json_string_y = json.dumps(j_y)
+        # context={}
+        # context['data_x']=json_string_x
+        # context['data_y']=json_string_y
+        return HttpResponse(json_string_x)
+
+def make_graph(req):
+    template_name = 'app/measure_graph.html'
+    context={}
+    return render(req,template_name,context)
+
 
 #Представление (функция) отвечающя за взаимодействие с формой
 @login_required

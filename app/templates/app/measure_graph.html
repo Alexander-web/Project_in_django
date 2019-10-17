@@ -1,8 +1,16 @@
 {% extends 'app/base.html' %}
 {% block content %}
 <div class="container">
+
     <canvas id="myChart"></canvas>
+
     <script>
+        fetch('get/graph/<slug:id_data>/<slug:meas_type>/')
+        .then(response => response.json()) // преобразуем ответ в json
+        .then(data => console.log(data))
+        console.log(data)
+        .catch(error => console.error(error))
+
         var ctx = document.getElementById('myChart').getContext('2d');
         // Global Options
         Chart.defaults.global.defaultFontFamily = 'Lato';
@@ -24,12 +32,6 @@
             // Configuration options go here
             options: {}
         });
-    </script>
-    <script type = 'text/javascript'>
-        const axios = require('axios');
-        const getExchangeRate = async (fromCurrency, toCurrency) => {}
-        const response = await axios.get('http://127.0.0.1:8000/get/meastype_info/gd/SSI_2/6/');
-        const rate = response.data.quotes;
     </script>
 </div>
 {% endblock content %}

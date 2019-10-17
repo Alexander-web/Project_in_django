@@ -32,6 +32,14 @@
                             </div>
                         </div>
                     </nav>
+                    {% if user.is_authenticated %}
+                        <nav class="nav">
+                            <div class="col-md-3">
+                                <li class="nav-item"><a class="nav-link active" href='http://127.0.0.1:8000/admin/'>Admin</a></li>
+                            </div>
+                        </nav>
+                    {% else %}
+                    {% endif %} 
                     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
                         {% if user.is_authenticated %}
                             <li id ='info'class="badge badge-success">Пользователь: {{ user.get_username }}</li>
