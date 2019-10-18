@@ -1,0 +1,35 @@
+{% extends 'app/base.html' %}
+{% block content %}
+<div class="container">
+
+    <canvas id="myChart"></canvas>
+    <script>
+        var data_common;
+        fetch('{% url "graph" id_data meas_type %}')
+        .then(response => response.json()) // преобразуем ответ в json
+        .then(data => {console.log(data)}) // выводим в консоль результат выполнения response.json()
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        // Global Options
+        Chart.defaults.global.defaultFontFamily = 'Lato';
+        Chart.defaults.global.defaultFontSize = 18;
+        Chart.defaults.global.defaultFontColor = '#777';
+        var chart = new Chart.Scatter(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+            // The data for our dataset
+            data: {
+                datasets: [{
+                    label: 'Характеристики',
+                    backgroundColor: 'rgb(54, 162, 235, 0.5)',
+                    borderColor: 'dark',
+                    data: data
+                }]
+            },
+            // Configuration options go here
+            options: {}
+        });
+    </script>
+</div>
+{% endblock content %}
+

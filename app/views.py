@@ -7,12 +7,12 @@ from django.http import HttpResponse
 from .forms import *
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
-# from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db import models
 import json
+
 
 #Добавляет измерения в очередь
 class MeasuresData(TemplateView):
@@ -100,13 +100,11 @@ class Meas_info(TemplateView):
         context['data']=AcceptData.objects.get(id=id_measure)
         return render(req,self.template_name,context)
 
+#Класс выдает json данные, взятые из БД, библиотеке feth 
 class Meas_graph(TemplateView):
     template_name = 'app/measure_graph.html'
     def get(self,req,id_data,meas_type):
-        x=[]
-        y=[]
-        x1={}
-        y1={}
+        xydata=[]
         data=AcceptData.objects.get(id=id_data)
         parse_data=data.xy
         parse_data=parse_data.replace(',', '.')
@@ -117,36 +115,28 @@ class Meas_graph(TemplateView):
             f0=f0.split(':')
             f1=f0[1]
             for i in parse:
+                data_dict={}
                 xy = i.split(':')
-                x.append(float(xy[0]))
-                y.append(float(xy[1]))
-            x1.update({"x":x})
-            y1.update({"y":y})
+                data_dict.update({"x": float(xy[0]), "y": float(xy[1])})
+                xydata.append(data_dict)
+            evidence=xydata
         else:
             for i in parse:
+                data_dict={}
                 xy = i.split(':')
-                x.append(float(xy[0]))
-                y.append(float(xy[1]))
-            x1.update({"x":x})
-            y1.update({"y":y})
-        j_x=json.dumps(x1)
-        with open("data_file_x.json", "w") as write_file:
-            json.dump(j_x, write_file)
-        j_y=json.dumps(y1)
-        with open("data_file_y.json", "w") as write_file:
-            json.dump(j_y, write_file)
-        json_string_x = json.dumps(j_x)
-        json_string_y = json.dumps(j_y)
-        # context={}
-        # context['data_x']=json_string_x
-        # context['data_y']=json_string_y
-        return HttpResponse(json_string_x)
+                data_dict.update({"x": float(xy[0]), "y": float(xy[1])})
+                xydata.append(data_dict)
+        evidence=xydata
+        json_data=json.dumps(evidence)
+        return HttpResponse(json_data)
 
-def make_graph(req):
+#Функция выводит страницу с графиком (внутри содержит feth с обращением к данным в классе выше)
+def make_graph(req,id_data,meas_type):
     template_name = 'app/measure_graph.html'
     context={}
+    context['id_data']=id_data
+    context['meas_type']=meas_type
     return render(req,template_name,context)
-
 
 #Представление (функция) отвечающя за взаимодействие с формой
 @login_required
@@ -204,27 +194,7 @@ def ssi_new(req):
         context['Freqmodel']=FreqRange.objects.all()
         return render(req,template_name,context)
 
-#Класс отвечает за форму для сортировки частотных диапазонов
-
-# def freq_sort(req):
-#     template_name = 'app/create_config.html'
-#     if req.method == "POST":
-#         frm = Formfilter(req.POST)
-#         if frm.is_valid():
-#             freq=frm.cleaned_data['choice']
-#             sort=FreqRange.custom_manager.get_queryset(freq)
-#             context = {}
-#             form = SSIform()
-#             context['form']=form
-#             context['Freqmodel']=sort
-#             context['freq']=FreqRange.objects.order_by().values_list('name', flat=True).distinct()
-#             context['chek']=freq
-#             if frm.cleaned_data['choice'] == 'all':
-#                 return redirect('create')
-#             else:
-#                 return render(req,template_name,context)
-#             # return redirect('create')
-
+#Функция отрисовывает hyml с отсартированными данными + выводит пункты меню выбора
 def freq_sort(req):
     template_name = 'app/filter.html'
     if req.method == "POST":
@@ -240,9 +210,9 @@ def freq_sort(req):
                 return redirect('ssi_list')
             else:
                 return render(req,template_name,context)
-            # return redirect('create')
 
-#Модель, отвечающая за переопределение стандартного менеджера модели FreqRange
+
+
 
 
 
@@ -265,3 +235,23 @@ def freq_sort(req):
             # new_freqrange=FreqRange.objects.create(input_range=ssi.input_frequency, output_range=ssi.output_frequency)
             # ssi.freqrange=new_freqrange
             # ssi.save()
+#Класс отвечает за форму для сортировки частотных диапазонов
+
+# def freq_sort(req):
+#     template_name = 'app/create_config.html'
+#     if req.method == "POST":
+#         frm = Formfilter(req.POST)
+#         if frm.is_valid():
+#             freq=frm.cleaned_data['choice']
+#             sort=FreqRange.custom_manager.get_queryset(freq)
+#             context = {}
+#             form = SSIform()
+#             context['form']=form
+#             context['Freqmodel']=sort
+#             context['freq']=FreqRange.objects.order_by().values_list('name', flat=True).distinct()
+#             context['chek']=freq
+#             if frm.cleaned_data['choice'] == 'all':
+#                 return redirect('create')
+#             else:
+#                 return render(req,template_name,context)
+#             # return redirect('create')

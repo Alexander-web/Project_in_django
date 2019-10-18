@@ -21,7 +21,7 @@ urlpatterns = [
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('get/filter/',views.freq_sort, name='filter'),
     path('get/graph/<slug:id_data>/<slug:meas_type>/', Meas_graph.as_view(), name = 'graph'),
-    path('get/make_graph/',views.make_graph, name = 'm_graph'),
+    path('get/make_graph/<slug:id_data>/<slug:meas_type>/',views.make_graph, name = 'm_graph'),
 
 ]
 
