@@ -20,11 +20,45 @@
                     </tr>
                 </tbody>
             </table>
-            <a href={% url 'measure_remove' data.id%} class="btn btn-danger">Delete measure</a>
-            <a href={% url 'm_graph' data.id mt_name %} class="btn btn-success">Показать график</a>
+            <a href={% url 'measure_remove' data.id %} class="btn btn-danger">Delete measure</a>
             </div>
         </div>
     </div>
 </div>
+<div class='container'>
+    <canvas id="myChart"></canvas>
+    <script>
+        async function getdata(){
+            let response = await fetch('{%url "graph" data_id mt_name %}')
+            let data = await response.json()
+            return data
+        }    
+        var m;
+        async function gt(){
+            m = await getdata()
+            var ctx = document.getElementById('myChart').getContext('2d');
+            // Global Options
+            Chart.defaults.global.defaultFontFamily = 'Lato';
+            Chart.defaults.global.defaultFontSize = 18;
+            Chart.defaults.global.defaultFontColor = '#777';
 
+            var chart = new Chart.Scatter(ctx, {
+                // The type of chart we want to create
+                type: 'line',
+                // The data for our dataset
+                data: {
+                    datasets: [{
+                        label: 'Характеристика',
+                        backgroundColor: 'rgb(54, 162, 235)',
+                        borderColor: 'dark',
+                        data: m
+                    }]
+                },
+                // Configuration options go here
+                options: {}
+            });
+        }
+        gt()
+    </script>
+</div>
 {% endblock content %}

@@ -38,7 +38,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for i in Freqmodel.all %}
+                    {% for i in Freqmodel %}
                         <tr>
                             <td>{{i.ssi_element.name}}</td>
                             <td>{{i.ssi_element.input_frequency}}</td>
@@ -69,5 +69,4 @@
         </div>
     </div>
 </div>
-{{chek}}
 {% endblock content %}

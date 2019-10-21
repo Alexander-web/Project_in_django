@@ -8,7 +8,7 @@ def create_data(type_of_data):
     Возвращает массив байтов с данными
     '''
     if type_of_data == 'afc':
-        d="D:\Programms\Projects\Python\server_client+pdf\data_for_server\data_ok\GL"
+        d="app\client_server\data_for_server\GL"
         l=os.listdir(path=d)
         rand = random.randint(0, l.__len__())
         t=l[rand]
@@ -16,9 +16,8 @@ def create_data(type_of_data):
         fr=f.read()
         # f.close()
         return bytes(fr,'utf-8')
-
     if type_of_data == 'gd':
-        d="D:\Programms\Projects\Python\server_client+pdf\data_for_server\data_ok\GD"
+        d="app\client_server\data_for_server\GD"
         l=os.listdir(path=d)
         rand = random.randint(0, l.__len__())
         t=l[rand]
@@ -27,7 +26,7 @@ def create_data(type_of_data):
         f.close()
         return bytes(fr,'utf-8')
     if type_of_data == 'amam':
-        d="D:\Programms\Projects\Python\server_client+pdf\data_for_server\data_ok\GT"
+        d="app\client_server\data_for_server\GT"
         l=os.listdir(path=d)
         rand = random.randint(0, l.__len__())
         t=l[rand]
@@ -36,7 +35,7 @@ def create_data(type_of_data):
         f.close()
         return bytes(fr,'utf-8')
     if type_of_data == 'pos':
-        d="D:\Programms\Projects\Python\server_client+pdf\data_for_server\data_ok\SP"
+        d="app\client_server\data_for_server\SP"
         l=os.listdir(path=d)
         rand = random.randint(0, l.__len__())
         t=l[rand]
@@ -44,9 +43,10 @@ def create_data(type_of_data):
         fr=f.read()
         f.close()
         return bytes(fr,'utf-8')
+
+
 while True:
         sock = socket.socket()
-
         port = 33333
         isOk = False
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # эта строчка должна решить вопрос с незакрытием порта после окончания работы программы
@@ -72,9 +72,9 @@ while True:
                 print('Connection closed from client')
                 conn.close()
                 break
-            if 'measure_afc' in udata:
+            if 'afc' in udata:
                 conn.send(create_data('afc'))
-            if 'measure_gd' in udata:
+            if 'gd' in udata:
                 conn.send(create_data('gd'))
             if 'amam' in udata:
                 conn.send(create_data('amam'))

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .client_server.tcp_client import send_and_return
+import threading 
 from django.shortcuts import redirect
 from .models import *
 from django.views.generic import TemplateView
@@ -13,6 +14,13 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db import models
 import json
 
+class Thread (threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+    def run(self):
+        from .client_server.tcp_server import create_data
+        data = create_data
+        return data
 
 #Добавляет измерения в очередь
 class MeasuresData(TemplateView):
@@ -30,7 +38,8 @@ class SSIList(LoginRequiredMixin,TemplateView):
         context['ssi'] = SSI.objects.all()
         context['planed_measure'] = Measure_que.objects.all()
         context['freq']=FreqRange.objects.order_by().values_list('name', flat=True).distinct()
-        context['Freqmodel']=FreqRange.objects.all()
+        context['SSI']=SSI.objects.all()
+        context['accept_data']=AcceptData.objects.all()
         return render(req, self.template_name,context)
 
 #Удаляет запланированные измерения из очереди
@@ -83,6 +92,11 @@ class Make_measures(PermissionRequiredMixin,TemplateView):
         mea=Measure.objects.all()
         for m in meas:
             me=str(m.meastype)
+            thread1 = Thread()
+            thread1.start()
+            # thr = threading.Thread(target=start_server, args=(me,))
+            # thr.setDaemon(True)
+            # thr.start()
             data_current=send_and_return(me)
             new_element=Measure.objects.create(ssi=m.ssi,mea=m.meastype)
             measurement_data_current=new_element
@@ -98,19 +112,19 @@ class Meas_info(TemplateView):
         context['mt_name']=mt_name
         context['ssi_name']=ssi_info_name
         context['data']=AcceptData.objects.get(id=id_measure)
+        context['data_id']=id_measure
         return render(req,self.template_name,context)
 
 #Класс выдает json данные, взятые из БД, библиотеке feth 
 class Meas_graph(TemplateView):
-    template_name = 'app/measure_graph.html'
-    def get(self,req,id_data,meas_type):
+    def get(self,req,data_id,mt_name):
         xydata=[]
-        data=AcceptData.objects.get(id=id_data)
+        data=AcceptData.objects.get(id=data_id)
         parse_data=data.xy
         parse_data=parse_data.replace(',', '.')
         parse_data=parse_data[0:parse_data.__len__()-2]
         parse=parse_data.split(';')
-        if (meas_type =='afc') or (meas_type =='gd'):
+        if (mt_name =='afc') or (mt_name =='gd'):
             f0=parse.pop(0)
             f0=f0.split(':')
             f1=f0[1]
@@ -126,17 +140,9 @@ class Meas_graph(TemplateView):
                 xy = i.split(':')
                 data_dict.update({"x": float(xy[0]), "y": float(xy[1])})
                 xydata.append(data_dict)
-        evidence=xydata
+            evidence=xydata
         json_data=json.dumps(evidence)
         return HttpResponse(json_data)
-
-#Функция выводит страницу с графиком (внутри содержит feth с обращением к данным в классе выше)
-def make_graph(req,id_data,meas_type):
-    template_name = 'app/measure_graph.html'
-    context={}
-    context['id_data']=id_data
-    context['meas_type']=meas_type
-    return render(req,template_name,context)
 
 #Представление (функция) отвечающя за взаимодействие с формой
 @login_required

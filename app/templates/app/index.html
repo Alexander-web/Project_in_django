@@ -26,22 +26,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for i in Freqmodel.all %}
+                {% for i in SSI %}
                 <tr>
                     <td>
-                        <a href={% url 'ssi_detail' i.ssi_element.name %}>{{i.ssi_element.name}}</a>
+                        <a href={% url 'ssi_detail' i.name %}>{{i.name}}</a>
                         <div class="small">Проведенные измерения:</div>
-                        {% for j in  i.ssi_element.meas.all%}
-                            <a href={% url 'meas_info' j.mea.name i.ssi_element.name j.id  %}><div class="small">{{j.mea.name}}</div></a>
+                        {% for j in  i.meas.all%}
+                            <a href={% url 'meas_info' j.mea.name i.name j.id %}><div class="small">{{j.mea.name}}</div></a>
                         {% endfor %}
                     </td>
-                    <td>{{i.ssi_element.input_frequency}}</td>
-                    <td>{{i.ssi_element.output_frequency}}</td>
-                    <td>{{i.ssi_element.band_frequency}}</td>
-                    <td>{{i.name}}</td>
+                    <td>{{i.input_frequency}}</td>
+                    <td>{{i.output_frequency}}</td>
+                    <td>{{i.band_frequency}}</td>
+                    <td>{{i.freqrange.get.name}}</td>
                     <td>
-                    {% for meas in i.ssi_element.available_meas.all %}
-                        <a href={% url 'name_meas' meas.name i.ssi_element.name%}>{{meas.name}}</a> 
+                    {% for meas in i.available_meas.all %}
+                        <a href={% url 'name_meas' meas.name i.name%}>{{meas.name}}</a> 
                     {% endfor %}
                     </td>
                 </tr>

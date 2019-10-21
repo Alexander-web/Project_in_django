@@ -48,7 +48,7 @@ class Measure(models.Model):
     def __str__(self):
         return 'Имя SSI: {}, Тип измерения: {}'.format(self.ssi, self.mea)
 
-class AcceptData(models.Model):                             # X-Y данные
+class AcceptData(models.Model):                            # X-Y данные
     xy = models.TextField('Полученные данные x,y')
     measurement_data = models.ForeignKey(Measure, on_delete = models.CASCADE,related_name = 'm')
     def __str__(self):
