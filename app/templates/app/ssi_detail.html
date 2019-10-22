@@ -8,7 +8,7 @@
                 <th>Имя SSI</th>
                 <th>Входная частота, ГГц</th>
                 <th>Выходная частота, ГГц</th>
-                <th>Измерения</th>
+                <th>Доступные измерения</th>
             </tr>
         </thead>
         <tbody>
@@ -24,6 +24,7 @@
             </tr>
         </tbody>
     </table>
+    <a href={% url 'ssi_remove_ssilist' ssi.id %} class="btn btn-danger">Удалить</a>
 </div>
 
 

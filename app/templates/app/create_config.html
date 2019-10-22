@@ -50,7 +50,7 @@
                             {% endfor %}
                             </td>
                             <td>{{i.name}}</td>
-                            <td><a href={% url 'ssi_remove_ssilist' i.ssi_element.id %} class="btn btn-danger">Delete</a></td> 
+                            <td><a href={% url 'ssi_remove_ssilist' i.ssi_element.id %} class="btn btn-danger">Удалить</a></td> 
                             {% comment %} Доступ через SSI к SSI {% endcomment %}
                             {% comment %} <td>{{s.input_frequency}}</td>
                             <td>{{s.output_frequency}}</td>

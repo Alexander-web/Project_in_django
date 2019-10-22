@@ -14,6 +14,57 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db import models
 import json
 
+#Функция отвечает за нормировку даных для графиков (возвращает данные в класс Meas_graph для дальнейшего преобразования в json)
+def norm_data(data_id,mt_name):
+    xydata=[]
+    x1=[]
+    y1=[]
+    data=AcceptData.objects.get(id=data_id)
+    parse_data=data.xy
+    parse_data=parse_data.replace(',', '.')
+    parse_data=parse_data[0:parse_data.__len__()-2]
+    parse=parse_data.split(';')
+    if (mt_name =='afc'):
+        f0=parse.pop(0)
+        f0=f0.split(':')
+        f1=f0[1]
+        for i in parse:
+            xy = i.split(':')
+            x1.append(float(xy[0]))
+            y1.append(float(xy[1]))
+    #Нормировка по уровню (мощность) + частота для АЧХ
+        for i,j in zip(y1,x1):
+            data_dict={}
+            p=max(y1)-i
+            h=j-float(f1)
+            data_dict.update({"x": h, "y": p})
+            xydata.append(data_dict)
+        return xydata
+    if mt_name == ('gd'):
+        f0=parse.pop(0)
+        f0=f0.split(':')
+        f1=f0[1]
+        for i in parse:
+            xy = i.split(':')
+            x1.append(float(xy[0]))
+            y1.append(float(xy[1]))
+    #Нормировка НГВЗ частота + уровень(время)
+        for i,j in zip(y1,x1):
+            data_dict={}
+            p=min(y1)-i
+            h=j-float(f1)
+            data_dict.update({"x": h, "y": p})
+            xydata.append(data_dict)
+        return xydata
+    else:
+        for i in parse:
+            data_dict={}
+            xy = i.split(':')
+            data_dict.update({"x": float(xy[0]), "y": float(xy[1])})
+            xydata.append(data_dict)
+        return xydata
+
+#Класс отвечает за создание потока, который используется для сервера (вызывается в классе Make_measures)
 class Thread (threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
@@ -118,29 +169,7 @@ class Meas_info(TemplateView):
 #Класс выдает json данные, взятые из БД, библиотеке feth 
 class Meas_graph(TemplateView):
     def get(self,req,data_id,mt_name):
-        xydata=[]
-        data=AcceptData.objects.get(id=data_id)
-        parse_data=data.xy
-        parse_data=parse_data.replace(',', '.')
-        parse_data=parse_data[0:parse_data.__len__()-2]
-        parse=parse_data.split(';')
-        if (mt_name =='afc') or (mt_name =='gd'):
-            f0=parse.pop(0)
-            f0=f0.split(':')
-            f1=f0[1]
-            for i in parse:
-                data_dict={}
-                xy = i.split(':')
-                data_dict.update({"x": float(xy[0]), "y": float(xy[1])})
-                xydata.append(data_dict)
-            evidence=xydata
-        else:
-            for i in parse:
-                data_dict={}
-                xy = i.split(':')
-                data_dict.update({"x": float(xy[0]), "y": float(xy[1])})
-                xydata.append(data_dict)
-            evidence=xydata
+        evidence=norm_data(data_id,mt_name)
         json_data=json.dumps(evidence)
         return HttpResponse(json_data)
 
@@ -200,7 +229,7 @@ def ssi_new(req):
         context['Freqmodel']=FreqRange.objects.all()
         return render(req,template_name,context)
 
-#Функция отрисовывает hyml с отсартированными данными + выводит пункты меню выбора
+#Функция отрисовывает html с отсартированными данными + выводит пункты меню выбора
 def freq_sort(req):
     template_name = 'app/filter.html'
     if req.method == "POST":
