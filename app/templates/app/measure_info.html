@@ -20,7 +20,29 @@
                     </tr>
                 </tbody>
             </table>
-            <a href={% url 'measure_remove' data.id %} class="btn btn-danger">Удалить измерение</a>
+                <div class="row">
+                    <div class="col-2">
+                    <a href={% url 'measure_remove' data.id %} class="btn btn-danger">Удалить измерение</a>
+                    </div>
+                    <div class="col-2">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
+                            <label class="custom-control-label text-success" for="customRadio1">Измерения проведены</label>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+                            <label class="custom-control-label text-danger" for="customRadio2">Измерения отсутствуют</label>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="customRadio3" name="customRadio" class="custom-control-input">
+                            <label class="custom-control-label text-secondary" for="customRadio3">Не проверено!</label>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

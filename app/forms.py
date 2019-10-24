@@ -6,6 +6,10 @@ from django.contrib.auth.forms import UserCreationForm
 Класс отвечает за создание формы, где model = SSI показывает какой класс будет использоваться для создания формы,
 fields говорит, какие поля использовать для этого.
 '''
+CHOICES = (
+    ('offline', 'Использовать offline сервер'),
+    ('real', 'Использовать векторный анализатор цепей'),
+)
 
 class SSIform(forms.ModelForm):
     class Meta:
@@ -14,3 +18,6 @@ class SSIform(forms.ModelForm):
 
 class Formfilter(forms.Form):
     choice=forms.CharField(widget=forms.Select())
+
+class Choose_device(forms.Form):
+    choose=forms.ChoiceField(widget=forms.RadioSelect(), choices=CHOICES, initial='offline')

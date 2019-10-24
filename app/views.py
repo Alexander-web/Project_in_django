@@ -27,7 +27,8 @@ def norm_data(data_id,mt_name):
     if (mt_name =='afc'):
         f0=parse.pop(0)
         f0=f0.split(':')
-        f1=f0[1]
+        # f1=f0[1]
+        f1=21164
         for i in parse:
             xy = i.split(':')
             x1.append(float(xy[0]))
@@ -35,7 +36,7 @@ def norm_data(data_id,mt_name):
     #Нормировка по уровню (мощность) + частота для АЧХ
         for i,j in zip(y1,x1):
             data_dict={}
-            p=max(y1)-i
+            p=i-max(y1)
             h=j-float(f1)
             data_dict.update({"x": h, "y": p})
             xydata.append(data_dict)
@@ -43,7 +44,8 @@ def norm_data(data_id,mt_name):
     if mt_name == ('gd'):
         f0=parse.pop(0)
         f0=f0.split(':')
-        f1=f0[1]
+        # f1=f0[1]
+        f1=21164
         for i in parse:
             xy = i.split(':')
             x1.append(float(xy[0]))
@@ -51,7 +53,7 @@ def norm_data(data_id,mt_name):
     #Нормировка НГВЗ частота + уровень(время)
         for i,j in zip(y1,x1):
             data_dict={}
-            p=min(y1)-i
+            p=i-min(y1)
             h=j-float(f1)
             data_dict.update({"x": h, "y": p})
             xydata.append(data_dict)
@@ -65,7 +67,7 @@ def norm_data(data_id,mt_name):
         return xydata
 
 #Класс отвечает за создание потока, который используется для сервера (вызывается в классе Make_measures)
-class Thread (threading.Thread):
+class Thread(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
     def run(self):
@@ -85,12 +87,13 @@ class MeasuresData(TemplateView):
 class SSIList(LoginRequiredMixin,TemplateView):
     template_name = 'app/index.html'
     def get(self,req):
+        form=Choose_device()
         context={}
         context['ssi'] = SSI.objects.all()
         context['planed_measure'] = Measure_que.objects.all()
         context['freq']=FreqRange.objects.order_by().values_list('name', flat=True).distinct()
         context['SSI']=SSI.objects.all()
-        context['accept_data']=AcceptData.objects.all()
+        context['form_for_device']=form
         return render(req, self.template_name,context)
 
 #Удаляет запланированные измерения из очереди
@@ -135,25 +138,49 @@ class SSIDetail(TemplateView):
         context['ssi'] = SSI.objects.get(name = ssi)
         return render(req, self.template_name,context)
 
-#Класс, проделывающий измерения
-class Make_measures(PermissionRequiredMixin,TemplateView):
-    permission_required = 'catalog.make_measures'
-    def get(self,req):
-        meas=Measure_que.objects.all()
-        mea=Measure.objects.all()
-        for m in meas:
-            me=str(m.meastype)
-            thread1 = Thread()
-            thread1.start()
-            # thr = threading.Thread(target=start_server, args=(me,))
-            # thr.setDaemon(True)
-            # thr.start()
-            data_current=send_and_return(me)
-            new_element=Measure.objects.create(ssi=m.ssi,mea=m.meastype)
-            measurement_data_current=new_element
-            new_measures=AcceptData.objects.create(measurement_data =measurement_data_current, xy=data_current)
-            m.delete()
-        return redirect('ssi_list')
+def real_measure(in_freq,out_freq,meas_name,freq_band):
+    pass
+    # prt='Входная частота:{}, Выходная частота:{}, Тип измерения:{}, Полоса частот:{}.'.format(in_freq,out_freq,meas_name,freq_band)
+    # return prt
+
+#Класс, проделывающий измерения из очереди
+# class Make_measures(PermissionRequiredMixin,TemplateView):
+#     permission_required = 'catalog.make_measures'
+def make_measures(req):
+    template_name = 'app/index.html'
+    if req.method == "POST":
+        form = Choose_device(req.POST)
+        if form.is_valid():
+            choose=form.cleaned_data['choose']
+            meas=Measure_que.objects.all()
+            mea=Measure.objects.all()
+            if choose == 'offline':
+                for m in meas:
+                    thread1 = Thread()# Запускаем сервер в отдельном потоке
+                    thread1.start()
+                    me=str(m.meastype)
+                    data_current=send_and_return(me)
+                    new_element=Measure.objects.create(ssi=m.ssi,mea=m.meastype)
+                    measurement_data_current=new_element
+                    new_measures=AcceptData.objects.create(measurement_data=measurement_data_current, xy=data_current)
+                    m.delete()
+                return redirect('ssi_list')
+            elif choose == 'real':
+                for m in meas:
+                    data_current=real_measure((m.ssi.input_frequency)*10e8,(m.ssi.output_frequency)*10e8,m.meastype,(m.ssi.band_frequency)*10e5)
+                    new_element=Measure.objects.create(ssi=m.ssi,mea=m.meastype)
+                    measurement_data_current=new_element
+                    new_measures=AcceptData.objects.create(measurement_data=measurement_data_current, xy=data_current)
+                    m.delete()
+                return redirect('ssi_list')
+                # context={}
+                # context['data_current']=data_current
+                # return render(req,template_name,context)
+        else:
+            form = Choose_device()
+            context = {}
+            context['form_for_device']=form
+            return render(req,template_name,context)
 
 #Класс отвечающий за вывод информации о проведенных измерениях
 class Meas_info(TemplateView):

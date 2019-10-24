@@ -50,30 +50,39 @@
             </table>
         </div>
             <div class="col-mdp-4">
-                <table class="table table-bordered">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Имя SSI</th>
-                            <th>Тип измерений</th>
-                            <th>Время добавления</th>
-                            <th>Действия</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for i in  planed_measure%}
-                        <tr>
-                            <th scope="row">{{i.ssi}}</th>
-                            <td>{{i.meastype}}</td>
-                            <td>{{i.date_time}}</td>
-                            <td><a href={% url 'ssi_remove' i.id%} class="btn btn-danger">Удалить</a></td>
-                        {% endfor %}
-                        </tr>
-                    </tbody>
-                </table>
-                <td><a href={% url 'make_measures' %} class="btn btn-primary">Провести измерения</a></td>
+                <form action ="{% url 'make_measures' %}"  method="POST" class="post-form "> {% csrf_token %}
+                        {{form_for_device.choose}}
+                        {% comment %} <ul id="id_choose">
+                            <li><label for="id_choose_0"><input type="radio" name="choose" value="0" required="" id="id_choose_0">Использовать offline сервер</label></li>
+                            <li><label for="id_choose_1"><input type="radio" name="choose" value="1" required="" id="id_choose_1"> Использовать векторный анализатор цепей</label></li>
+                        </ul> {% endcomment %}
+                    <table class="table table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Имя SSI</th>
+                                <th>Тип измерений</th>
+                                <th>Время добавления</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in  planed_measure%}
+                            <tr>
+                                <th scope="row">{{i.ssi}}</th>
+                                <td>{{i.meastype}}</td>
+                                <td>{{i.date_time}}</td>
+                                <td><a href={% url 'ssi_remove' i.id%} class="btn btn-danger">Удалить</a></td>
+                            {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+                    {% comment %} <td><a href={% url 'make_measures' %} class="btn btn-primary">Провести измерения</a></td> {% endcomment %}
+                    <button type="submit" class="save btn btn btn-primary">Провести измерения</button>
+                </form> 
             </div>
         </div>  
     </div>
 </div>
+{% comment %} {{data_current}} {% endcomment %}
 
 {% endblock content %}
