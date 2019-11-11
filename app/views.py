@@ -188,6 +188,7 @@ class Check_valid(TemplateView):
     def get(self,req,mt_name,ssi_info_name,id_measure,valid):
         context={}
         context['mt_name']=mt_name
+        context['keys']=MeasureType.objects.get(name=mt_name)
         context['ssi_name']=ssi_info_name
         context['data']=AcceptData.objects.get(id=id_measure)
         context['data_id']=id_measure

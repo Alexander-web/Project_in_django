@@ -3,7 +3,7 @@
 
 <div class="container-fluid">
     <div id="row3" class="row d-flex justify-content-around ">
-        <div class="col-md-7 ">
+        <div class="col-md-8 ">
             <form action = "filter/" method="POST" class="post-form "> {% csrf_token %}
                 <select id = 'form_select' name="choice" id="id_choice" class="custom-select" >
                 <option value = "all" selected>Все диапазоны</option>
@@ -29,12 +29,12 @@
                 </thead>
                 <tbody>
                 {% for i in SSI %}
-                <tr>
-                    <td >
+                <tr >
+                    <td>
                         <a href={% url 'ssi_detail' i.name %}>{{i.name}}</a>
                     </td>
                     <td>{{i.meas.all.count}}</td>
-                    <td>
+                    <td >
                         {% for j in  dict_ad.items%}
                             {% if i.name in j %}
                                 {{ j|last }}
@@ -62,7 +62,7 @@
                 </tbody>
             </table>
         </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <form action ="{% url 'make_measures' %}"  method="POST" class="post-form "> {% csrf_token %}
                         {{form_for_device.choose}}
                     <table class="table table-bordered">

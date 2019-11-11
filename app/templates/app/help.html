@@ -3,51 +3,79 @@
 {% load staticfiles %}
 
 <div class="row" id="ro2">
-                        <div class="col-md-6">
-                            <img id="image" src="{% static 'images/N5245A.jpg' %}" alt="logo" class='img-fluid' width='695' height='338'>
-                        </div>
-                        <div class="col">
-                            <table class="table table-bordered">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th>Параметр:</th>
-                                        <th>Значение:</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">Диапазон частот: </th>
-                                        <td>10 МГц - 50 ГГц</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Уровень собственных шумов (дБм/Гц)</th>
-                                        <td>минус 110/минус 111</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Максимальная мощность на частотах 3 ГГц/20 ГГц (дБм): </th>
-                                        <td>+8–13/+5–10</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Выходная мощность: </th>
-                                        <td>13дБм</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Динамический диапазон:</th>
-                                        <td>124дБ</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Минимальный уровень шумов: </th>
-                                        <td>- 111 дБм</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Максимальная скорость (201 точка, 1 развертка):</th>
-                                        <td>5.5 мс</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-
+    <div class="col-md-6">
+        <img id="image" src="{% static 'images/N5245A.jpg' %}" alt="logo" class='img-fluid' width='695' height='338'>
+    </div>
+    <div class="col">
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Параметр:</th>
+                    <th>Значение:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Диапазон частот: </th>
+                    <td>10 МГц - 50 ГГц</td>
+                </tr>
+                <tr>
+                    <th scope="row">Уровень собственных шумов (дБм/Гц)</th>
+                    <td>минус 110/минус 111</td>
+                </tr>
+                <tr>
+                    <th scope="row">Максимальная мощность на частотах 3 ГГц/20 ГГц (дБм): </th>
+                    <td>+8–13/+5–10</td>
+                </tr>
+                <tr>
+                    <th scope="row">Выходная мощность: </th>
+                    <td>13дБм</td>
+                </tr>
+                <tr>
+                    <th scope="row">Динамический диапазон:</th>
+                    <td>124дБ</td>
+                </tr>
+                <tr>
+                    <th scope="row">Минимальный уровень шумов: </th>
+                    <td>- 111 дБм</td>
+                </tr>
+                <tr>
+                    <th scope="row">Максимальная скорость (201 точка, 1 развертка):</th>
+                    <td>5.5 мс</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row ">
+    <div class="col-md ">
+        <h1>Как пользоваться?</h1>
+        <p>
+        1. Первым делом необходимо создать ключи для настройки векторного анализатора цепей.
+        Cделать это можно, перейдя во вкладку "Create config". 
+        </p>
+        <img src="{% static 'images/Снимок_1.PNG' %}" alt="logo" class='img-fluid' width='1100' height='500'>
+        {% comment %} <a href="#" class="stretched-link">1.</a> {% endcomment %}
+        <p>
+        2. Заполнить представленную на рисунке ниже форму, и нажать кнопку "Добавить ключ", для того чтобы внести введенные данные в базу данных.
+        Введенные данные будут использованы для настройки векторного анализатора цепей (ВАЦ).
+        </p>
+        <img src="{% static 'images/Снимок_2.PNG' %}" alt="logo" class='img-fluid' width='700' height='500'>
+        <p>
+        3. После выполнения предыдущего пункта заполнить форму, предназначенную для создания типов измерений, которые будут проводиться.
+        </p>
+        <p>В пункте "Ключи" выбрать необходимые параметры настройки ВАЦ, а затем записать в пункте "Тип измерения" имя необходимого измерения, после чего нажать кнопку "Добавить тип".</p>
+        <img src="{% static 'images/Снимок_3.PNG' %}" alt="logo" class='img-fluid' width='700' height='500'>
+        <p>
+            Выбранные измерения и созданные ключи будут отображаться в таблице, расположенной справа.
+        </p>
+        <img src="{% static 'images/Снимок_4.PNG' %}" alt="logo" class='img-fluid' width='1200' height='1200'>
+        <p>
+        4. Для того чтобы создать конфигурации измерений и параметры для измерений, необходимо заполнить поля представленные на рисунке ниже, после чего нажать кнопку "Добавить SSI".
+        </p>
+        <p>Созданные параметры будут отображены а таблице справа.</p>
+        <img src="{% static 'images/Снимок_5.PNG' %}" alt="logo" class='img-fluid' width='1200' height='1200'>
+    </div>
+</div>
 
 {% endblock content %}
