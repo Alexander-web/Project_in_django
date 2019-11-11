@@ -2,8 +2,8 @@
 {% block content %}
 
 <div class="container-fluid">
-    <div id="row3" class="row">
-        <div class="col-md-8">
+    <div id="row3" class="row d-flex justify-content-around ">
+        <div class="col-md-7 ">
             <form action = "filter/" method="POST" class="post-form "> {% csrf_token %}
                 <select id = 'form_select' name="choice" id="id_choice" class="custom-select" >
                 <option value = "all" selected>Все диапазоны</option>
@@ -11,13 +11,15 @@
                     <option value={{i}}>{{i}}</option>
                 {% endfor %}
                 </select>
-                {% comment %} <div >{{formfreq.choice}}</div> {% endcomment %}
                 <button type="submit" class="save btn btn btn-primary">Сортировать</button>
-            </form>          
+            </form>         
             <table id ='tableSSI' class="table table-bordered ">
                 <thead class="thead-light">
                     <tr>
-                        <th>SSI_name</th>
+                        <th>Имя SSI</th>
+                        <th>Изм</th>
+                        <th>Под-но</th>
+                        <th>Не пд-но</th>
                         <th>Входная частота, ГГц</th>
                         <th>Выходная частота, ГГц</th>
                         <th>Полоса частот, МГц</th>
@@ -28,12 +30,23 @@
                 <tbody>
                 {% for i in SSI %}
                 <tr>
-                    <td>
+                    <td >
                         <a href={% url 'ssi_detail' i.name %}>{{i.name}}</a>
-                        <div class="small">Проведенные измерения:</div>
-                        {% for j in  i.meas.all%}
-                            <a href={% url 'meas_info' j.mea.name i.name j.id %}><div class="small">{{j.mea.name}}</div></a>
-                        {% endfor %}
+                    </td>
+                    <td>{{i.meas.all.count}}</td>
+                    <td>
+                        {% for j in  dict_ad.items%}
+                            {% if i.name in j %}
+                                {{ j|last }}
+                            {% endif %}
+                        {% endfor %}    
+                    </td>
+                    <td>
+                        {% for j in  dict_ad_0.items%}
+                            {% if i.name in j %}
+                                {{ j|last }}
+                            {% endif %}
+                        {% endfor %}   
                     </td>
                     <td>{{i.input_frequency}}</td>
                     <td>{{i.output_frequency}}</td>
@@ -49,13 +62,9 @@
                 </tbody>
             </table>
         </div>
-            <div class="col-mdp-4">
+            <div class="col-md-3">
                 <form action ="{% url 'make_measures' %}"  method="POST" class="post-form "> {% csrf_token %}
                         {{form_for_device.choose}}
-                        {% comment %} <ul id="id_choose">
-                            <li><label for="id_choose_0"><input type="radio" name="choose" value="0" required="" id="id_choose_0">Использовать offline сервер</label></li>
-                            <li><label for="id_choose_1"><input type="radio" name="choose" value="1" required="" id="id_choose_1"> Использовать векторный анализатор цепей</label></li>
-                        </ul> {% endcomment %}
                     <table class="table table-bordered">
                         <thead class="thead-light">
                             <tr>
@@ -76,13 +85,11 @@
                             </tr>
                         </tbody>
                     </table>
-                    {% comment %} <td><a href={% url 'make_measures' %} class="btn btn-primary">Провести измерения</a></td> {% endcomment %}
-                    <button type="submit" class="save btn btn btn-primary">Провести измерения</button>
+                    <button type="submit" class="save btn btn-primary">Провести измерения</button>
                 </form> 
             </div>
         </div>  
     </div>
 </div>
-{% comment %} {{data_current}} {% endcomment %}
 
 {% endblock content %}

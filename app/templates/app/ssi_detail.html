@@ -2,29 +2,262 @@
 {% block content %}
 
 <div class="container-fluid">
-    <table class="table table-bordered">
-        <thead class="thead-light">
-            <tr>
-                <th>Имя SSI</th>
-                <th>Входная частота, ГГц</th>
-                <th>Выходная частота, ГГц</th>
-                <th>Доступные измерения</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">{{ssi.name}}</th>
-                <td>{{ssi.input_frequency}}</td>
-                <td>{{ssi.output_frequency}}</td>
-                    <td>
-                        {% for me in ssi.meas.all %}
-                            <p class="small">{{me.mea.name}}</p>
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Имя SSI</th>
+                        <th>Входная частота, ГГц</th>
+                        <th>Выходная частота, ГГц</th>
+                        <th>Полоса, МГц</th>
+                        <th>Частотный диапазон</th>
+                        {% comment %} <th>Проведенные измерения:</th>
+                        <th>Время проведения:</th> {% endcomment %}
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">{{ssi.name}}</th>
+                        <td>{{ssi.input_frequency}}</td>
+                        <td>{{ssi.output_frequency}}</td>
+                        <td>{{ssi.band_frequency}}</td>
+                        <td>{{ssi.freqrange.get.name}}</td>
+                        {% comment %} <td>
+                            {% for j in  ssi.meas.all%}
+                                {% if j.m.get.isvalid is 0 %}
+                                    <a href={% url 'meas_info' j.mea.name j.ssi.name j.id %}><div class="font-weight-bold text-secondary">{{j.mea.name}}</div></a>                           
+                                {% elif j.m.get.isvalid is 1 %}
+                                    <a href={% url 'meas_info' j.mea.name j.ssi.name j.id %}><div class="font-weight-bold text-danger">{{j.mea.name}}</div></a>                            
+                                {% elif j.m.get.isvalid is 2 %}
+                                    <a href={% url 'meas_info' j.mea.name j.ssi.name j.id %}><div class="font-weight-bold text-success">{{j.mea.name}}</div></a>
+                                {% endif %}
+                            {% endfor %} 
+                        </td>
+                        <td>
+                            {% for j in  ssi.meas.all%}
+                            <div>{{j.time}}</div>
+                            {% endfor %} 
+                        </td> {% endcomment %}
+                        <td><a href={% url 'ssi_remove_ssilist' ssi.id %} class="btn btn-danger">Удалить</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% comment %} {% for j in  ssi.meas.all%}
+        <div class="row d-flex justify-content-center">
+            <div class="col-9">
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>
+                                {% if j.m.get.isvalid is 0 %}
+                                    <a href={% url 'meas_info' j.mea.name j.ssi.name j.id %}><div class="font-weight-bold text-secondary">{{j.mea.name}}</div></a>                           
+                                {% elif j.m.get.isvalid is 1 %}
+                                    <a href={% url 'meas_info' j.mea.name j.ssi.name j.id %}><div class="font-weight-bold text-danger">{{j.mea.name}}</div></a>                            
+                                {% elif j.m.get.isvalid is 2 %}
+                                    <a href={% url 'meas_info' j.mea.name j.ssi.name j.id %}><div class="font-weight-bold text-success">{{j.mea.name}}</div></a>
+                                {% endif %}                            
+                            </th>
+                            <th>Ключи:</th>
+                            <th>Оператор:</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>{{j.time}}</th>
+                            <td>{{j.mea.key}}</td>
+                            <td>{{operator.get}}</td> 
+                            <td>
+                                <button type="button" class="btn btn-info">Создать PDF</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endfor %} {% endcomment %}
+
+
+    {% for j in  dict_meas.items%}
+        {% if 'afc' in j %}
+            <div class="row d-flex justify-content-center">
+                <div class="col-9">
+                    <table class="table table-bordered">
+                    <p>АЧХ</p>
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Измерения:</th>
+                                <th>Время проведения:</th>
+                                <th>Ключи:</th>
+                                <th>Оператор:</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in ssi_afc %}
+                            <tr>
+                                <td>
+                                    {% if i.m.get.isvalid is 0 %}
+                                        <a href={% url 'meas_info' i.mea.name i.ssi.name i.id %}><div class="font-weight-bold text-secondary">{{i.mea.name}}</div></a>                           
+                                    {% elif i.m.get.isvalid is 1 %}
+                                        <a href={% url 'meas_info' i.mea.name i.ssi.name i.id %}><div class="font-weight-bold text-danger">{{i.mea.name}}</div></a>                            
+                                    {% elif i.m.get.isvalid is 2 %}
+                                        <a href={% url 'meas_info' i.mea.name i.ssi.name i.id %}><div class="font-weight-bold text-success">{{i.mea.name}}</div></a>
+                                    {% endif %} 
+                                    {% comment %} <div>{{i.mea.name}}</div> {% endcomment %}
+                                </td>
+                                <td>
+                                    <div>{{i.time}}</div>
+                                </td>
+                                <td>
+                                    <div>{{i.mea.key}}</div>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <button type="button" class="btn btn-info">Создать PDF</button>
+                                </td>
+                            </tr>
                         {% endfor %}
-                    </td>
-            </tr>
-        </tbody>
-    </table>
-    <a href={% url 'ssi_remove_ssilist' ssi.id %} class="btn btn-danger">Удалить</a>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% elif  'gd' in j%}
+            {% comment %} <div>{{ssi_gd}}</div> {% endcomment %}
+            <div class="row d-flex justify-content-center">
+                <div class="col-9">
+                    <table class="table table-bordered">
+                    <p>НГВЗ</p>
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Измерения:</th>
+                                <th>Время проведения:</th>
+                                <th>Ключи:</th>
+                                <th>Оператор:</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in ssi_gd %}
+                            <tr>
+                                <td>
+                                    {% if i.m.get.isvalid is 0 %}
+                                        <a href={% url 'meas_info' i.mea.name i.ssi.name i.id %}><div class="font-weight-bold text-secondary">{{i.mea.name}}</div></a>                           
+                                    {% elif i.m.get.isvalid is 1 %}
+                                        <a href={% url 'meas_info' i.mea.name i.ssi.name i.id %}><div class="font-weight-bold text-danger">{{i.mea.name}}</div></a>                            
+                                    {% elif i.m.get.isvalid is 2 %}
+                                        <a href={% url 'meas_info' i.mea.name i.ssi.name i.id %}><div class="font-weight-bold text-success">{{i.mea.name}}</div></a>
+                                    {% endif %} 
+                                </td>
+                                <td>
+                                    <div>{{i.time}}</div>
+                                </td>
+                                <td>
+                                    <div>{{i.mea.key}}</div>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <button type="button" class="btn btn-info">Создать PDF</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% elif   'amam' in j %}
+            {% comment %} <div>{{ssi_amam}}</div> {% endcomment %}
+            <div class="row d-flex justify-content-center">
+                <div class="col-9">
+                    <table class="table table-bordered">
+                    <p>АМ/АМ</p>
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Измерения:</th>
+                                <th>Время проведения:</th>
+                                <th>Ключи:</th>
+                                <th>Оператор:</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in ssi_amam %}
+                            <tr>
+                                <td>
+                                    {% if i.m.get.isvalid is 0 %}
+                                        <a href={% url 'meas_info' i.mea.name i.ssi.name i.id %}><div class="font-weight-bold text-secondary">{{i.mea.name}}</div></a>                           
+                                    {% elif i.m.get.isvalid is 1 %}
+                                        <a href={% url 'meas_info' i.mea.name i.ssi.name i.id %}><div class="font-weight-bold text-danger">{{i.mea.name}}</div></a>                            
+                                    {% elif i.m.get.isvalid is 2 %}
+                                        <a href={% url 'meas_info' i.mea.name i.ssi.name i.id %}><div class="font-weight-bold text-success">{{i.mea.name}}</div></a>
+                                    {% endif %} 
+                                </td>
+                                <td>
+                                    <div>{{i.time}}</div>
+                                </td>
+                                <td>
+                                    <div>{{i.mea.key}}</div>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <button type="button" class="btn btn-info">Создать PDF</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% elif   'pos' in j%}
+            {% comment %} <div>{{ssi_pos}}</div> {% endcomment %}
+            <div class="row d-flex justify-content-center">
+                <div class="col-9">
+                    <table class="table table-bordered">
+                    <p>Точка насыщения</p>
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Измерения:</th>
+                                <th>Время проведения:</th>
+                                <th>Ключи:</th>
+                                <th>Оператор:</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in ssi_pos %}
+                            <tr>
+                                <td>
+                                    {% if i.m.get.isvalid is 0 %}
+                                        <a href={% url 'meas_info' i.mea.name i.ssi.name i.id %}><div class="font-weight-bold text-secondary">{{i.mea.name}}</div></a>                           
+                                    {% elif i.m.get.isvalid is 1 %}
+                                        <a href={% url 'meas_info' i.mea.name i.ssi.name i.id %}><div class="font-weight-bold text-danger">{{i.mea.name}}</div></a>                            
+                                    {% elif i.m.get.isvalid is 2 %}
+                                        <a href={% url 'meas_info' i.mea.name i.ssi.name i.id %}><div class="font-weight-bold text-success">{{i.mea.name}}</div></a>
+                                    {% endif %} 
+                                </td>
+                                <td>
+                                    <div>{{i.time}}</div>
+                                </td>
+                                <td>
+                                    <div>{{i.mea.key}}</div>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <button type="button" class="btn btn-info">Создать PDF</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}    
+
 </div>
 
 

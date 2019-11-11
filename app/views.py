@@ -1,17 +1,19 @@
-from django.shortcuts import render
-from .client_server.tcp_client import send_and_return
-import threading 
+# from django.conf import settings
+from django.shortcuts import render 
 from django.shortcuts import redirect
-from .models import *
 from django.views.generic import TemplateView
 from django.http import HttpResponse
-from .forms import *
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db import models
+import threading
+from .models import *
+from .forms import *
+from .client_server.tcp_client import send_and_return
+from .scpi.afc_gd import create_meas
 import json
 
 #Функция отвечает за нормировку даных для графиков (возвращает данные в класс Meas_graph для дальнейшего преобразования в json)
@@ -20,15 +22,19 @@ def norm_data(data_id,mt_name):
     x1=[]
     y1=[]
     data=AcceptData.objects.get(id=data_id)
+
     parse_data=data.xy
     parse_data=parse_data.replace(',', '.')
     parse_data=parse_data[0:parse_data.__len__()-2]
     parse=parse_data.split(';')
+
+    input_freq = data.measurement_data.ssi.input_frequency*1000
+    output_freq = data.measurement_data.ssi.output_frequency*1000
     if (mt_name =='afc'):
         f0=parse.pop(0)
         f0=f0.split(':')
         # f1=f0[1]
-        f1=21164
+        f1=output_freq
         for i in parse:
             xy = i.split(':')
             x1.append(float(xy[0]))
@@ -45,7 +51,7 @@ def norm_data(data_id,mt_name):
         f0=parse.pop(0)
         f0=f0.split(':')
         # f1=f0[1]
-        f1=21164
+        f1=output_freq
         for i in parse:
             xy = i.split(':')
             x1.append(float(xy[0]))
@@ -53,7 +59,12 @@ def norm_data(data_id,mt_name):
     #Нормировка НГВЗ частота + уровень(время)
         for i,j in zip(y1,x1):
             data_dict={}
-            p=i-min(y1)
+
+            len_y_half = round(y1.__len__()/2) # Возвращает половину значений графика gd с округлением к большему
+            left_max = y1.index(max(y1[0:len_y_half]))# Ищем максимальное значение в левой половинке графика, проходя от значения 0 до половинки графика len_y_half
+            right_max = y1.index(max(y1[len_y_half:]))# Ищем максимальное значение в правой половинке графика, проходя от значения len_y_half до конца графика
+            
+            p=i-min(y1[left_max:right_max])#Делаем срез y1 от левого максимума до правого и находим в этих значения минимальное значение
             h=j-float(f1)
             data_dict.update({"x": h, "y": p})
             xydata.append(data_dict)
@@ -89,11 +100,26 @@ class SSIList(LoginRequiredMixin,TemplateView):
     def get(self,req):
         form=Choose_device()
         context={}
-        context['ssi'] = SSI.objects.all()
         context['planed_measure'] = Measure_que.objects.all()
         context['freq']=FreqRange.objects.order_by().values_list('name', flat=True).distinct()
         context['SSI']=SSI.objects.all()
         context['form_for_device']=form
+        context['ad']=AcceptData.objects.filter(isvalid=2)
+        context['ad_0']=AcceptData.objects.filter(isvalid=0)
+        dict_ad={}
+        for i in context['ad']:   
+            if i.measurement_data.ssi.name not in dict_ad:
+                dict_ad[i.measurement_data.ssi.name]=1
+            else:
+                dict_ad[i.measurement_data.ssi.name]+=1
+        context['dict_ad']=dict_ad
+        dict_ad_0={}
+        for i in context['ad_0']:   
+            if i.measurement_data.ssi.name not in dict_ad_0:
+                dict_ad_0[i.measurement_data.ssi.name]=1
+            else:
+                dict_ad_0[i.measurement_data.ssi.name]+=1
+        context['dict_ad_0']=dict_ad_0
         return render(req, self.template_name,context)
 
 #Удаляет запланированные измерения из очереди
@@ -118,7 +144,13 @@ class  Remove_from_ssilist(TemplateView):
 class Baselist(LoginRequiredMixin,TemplateView):
     template_name = 'app/base.html'
     def get(self,req):
+        form=Operatorform()
+        form_SpaceCraft=SpaceCraftform()
+        form_PayLoad=PayLoadform()
         context={}
+        context['operator']=form
+        context['spacecraft']=form_SpaceCraft
+        context['payload']=form_PayLoad
         # context['ssi_name'] = SSI.objects.all()
         return render(req, self.template_name,context)
 
@@ -136,16 +168,33 @@ class SSIDetail(TemplateView):
     def get(self,req,ssi):
         context={}
         context['ssi'] = SSI.objects.get(name = ssi)
+        context['ssi_afc']=context['ssi'].meas.all().filter(mea__name="afc")
+        context['ssi_gd']=context['ssi'].meas.all().filter(mea__name="gd")
+        context['ssi_amam']=context['ssi'].meas.all().filter(mea__name="amam")
+        context['ssi_pos']=context['ssi'].meas.all().filter(mea__name="pos")
+        context['SSI'] = SSI.objects.all()
+        context['operator']=Operator.objects.all()
+        dict_meas={}
+        for i in context['ssi'].meas.all():
+            if i.mea.name not in dict_meas:
+                dict_meas[i.mea.name]=1
+            else:
+                dict_meas[i.mea.name]+=1
+        context['dict_meas']=dict_meas
         return render(req, self.template_name,context)
 
-def real_measure(in_freq,out_freq,meas_name,freq_band):
-    pass
-    # prt='Входная частота:{}, Выходная частота:{}, Тип измерения:{}, Полоса частот:{}.'.format(in_freq,out_freq,meas_name,freq_band)
-    # return prt
+class Check_valid(TemplateView):
+    template_name = 'app/measure_info.html'
+    def get(self,req,mt_name,ssi_info_name,id_measure,valid):
+        context={}
+        context['mt_name']=mt_name
+        context['ssi_name']=ssi_info_name
+        context['data']=AcceptData.objects.get(id=id_measure)
+        context['data_id']=id_measure
+        context['data'].isvalid=int(valid)
+        context['data'].save()
+        return render(req,self.template_name,context)
 
-#Класс, проделывающий измерения из очереди
-# class Make_measures(PermissionRequiredMixin,TemplateView):
-#     permission_required = 'catalog.make_measures'
 def make_measures(req):
     template_name = 'app/index.html'
     if req.method == "POST":
@@ -154,28 +203,22 @@ def make_measures(req):
             choose=form.cleaned_data['choose']
             meas=Measure_que.objects.all()
             mea=Measure.objects.all()
-            if choose == 'offline':
-                for m in meas:
+            for m in meas:
+                me=str(m.meastype)
+                if choose == 'offline':
                     thread1 = Thread()# Запускаем сервер в отдельном потоке
                     thread1.start()
-                    me=str(m.meastype)
+                    from time import sleep
+                    sleep(0.2)
                     data_current=send_and_return(me)
-                    new_element=Measure.objects.create(ssi=m.ssi,mea=m.meastype)
-                    measurement_data_current=new_element
-                    new_measures=AcceptData.objects.create(measurement_data=measurement_data_current, xy=data_current)
-                    m.delete()
-                return redirect('ssi_list')
-            elif choose == 'real':
-                for m in meas:
-                    data_current=real_measure((m.ssi.input_frequency)*10e8,(m.ssi.output_frequency)*10e8,m.meastype,(m.ssi.band_frequency)*10e5)
-                    new_element=Measure.objects.create(ssi=m.ssi,mea=m.meastype)
-                    measurement_data_current=new_element
-                    new_measures=AcceptData.objects.create(measurement_data=measurement_data_current, xy=data_current)
-                    m.delete()
-                return redirect('ssi_list')
-                # context={}
-                # context['data_current']=data_current
-                # return render(req,template_name,context)
+                elif choose == 'real':
+                    data_current = create_meas((m.ssi.input_frequency)*10e8,(m.ssi.output_frequency)*10e8,(m.ssi.band_frequency)*10e5,m.meastype.name,201)
+                    print(data_current)
+                new_element=Measure.objects.create(ssi=m.ssi,mea=m.meastype)
+                measurement_data_current=new_element
+                new_measures=AcceptData.objects.create(xy=data_current,measurement_data=measurement_data_current,isvalid ='0')
+                m.delete()
+            return redirect('ssi_list')
         else:
             form = Choose_device()
             context = {}
@@ -191,6 +234,8 @@ class Meas_info(TemplateView):
         context['ssi_name']=ssi_info_name
         context['data']=AcceptData.objects.get(id=id_measure)
         context['data_id']=id_measure
+        context['keys']=MeasureType.objects.get(name=mt_name)
+        context['operator']=Operator.objects.all()
         return render(req,self.template_name,context)
 
 #Класс выдает json данные, взятые из БД, библиотеке feth 
@@ -250,10 +295,15 @@ def ssi_new(req):
             return redirect('create')
     else:
         form = SSIform()
+        keys_form=Keysform()
+        measuretype_form=MeasureTypeform()
         context = {}
-        context['form']=form
-        # context['freq']=FreqRange.objects.values_list('input_range','output_range').distinct()
+        context['keys_form']=keys_form
+        context['measuretype_form']=measuretype_form
+        context['key_data']=Keys.objects.all()
+        context['measure_type_data']=MeasureType.objects.all()
         context['Freqmodel']=FreqRange.objects.all()
+        context['form']=form
         return render(req,template_name,context)
 
 #Функция отрисовывает html с отсартированными данными + выводит пункты меню выбора
@@ -273,15 +323,42 @@ def freq_sort(req):
             else:
                 return render(req,template_name,context)
 
+def key_create(req):
+    if req.method == "POST":
+        form = Keysform(req.POST)
+        if form.is_valid():
+            key = form.save()
+    return redirect('create')
 
+def create_measure(req):
+    if req.method == "POST":
+        form = MeasureTypeform(req.POST)
+        if form.is_valid():
+            measure_type = form.save()
+    return redirect('create')
 
+def create_operator(req):
+    if req.method == "POST":
+        form = Operatorform(req.POST)
+        form_spacecraft = SpaceCraftform(req.POST)
+        if form_spacecraft.is_valid() and form.is_valid():
+            operator = form.save()
+            spacecraft = form_spacecraft.save()
+    return redirect('base_list')
 
+def create_payload(req):
+    if req.method == "POST":
+        form = PayLoadform(req.POST)
+        if form.is_valid():
+            pay_load = form.save()
+    return redirect('base_list')
 
-
-
-
-
-
+class Keys_lists(TemplateView):
+    template_name = 'app/Keys.html'
+    def get(self,req):
+        context={}
+        context['key']=Keys.objects.all()
+        return render(req,self.template_name,context)
 
 
 

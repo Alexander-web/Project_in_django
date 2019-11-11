@@ -52,8 +52,46 @@
                     </nav>
                 </nav>
                 {% block content %}
-                <h1>Вход успешно выполнен! </h1>
-                <p>Информацию о способах проведения измерений можно получить в разделе Help!</p>
+                {% comment %} <p>Информацию о способах проведения измерений можно получить в разделе Help!</p> {% endcomment %}
+                <div class="jumbotron">
+                    <h1 class="display-3">Вход выполнен!</h1>
+                    <p class="lead">Для проведения измерений необходимо заполнить форму, представленную ниже.</p>
+                    <hr class="my-2">
+                    <div class="row d-flex justify-content-center">
+                        <form action = "{% url 'op' %}"  method="POST" class="post-form " > {% csrf_token %}
+                            <div class="col-md ">
+                                <p>В форме "Оператор" необходимо заполнить имя и фамилию того, кто будет проводить измерения.</p>
+                                {% comment %} {{operator}} {% endcomment %}
+                                <div><label for="id_firstname">Имя оператора:</label></div>
+                                <div>{{operator.firstname}}</div>
+                                <div><label for="id_lastname">Фамилия оператора:</label></div>
+                                <div>{{operator.lastname}}</div>
+                            </div>
+                            <div class="col-md">
+                                <p>В форме "Наименование КА" нужно указать название космического аппарата, для которого будут проводися измерения.</p>
+                                {% comment %} {{spacecraft}} {% endcomment %}
+                                <div><label for="id_name">Наименование КА:</label></div>
+                                <div>{{spacecraft.name}}</div>
+                                <p class="lead">
+                                <div><div><button id = "btn1" type="submit" class="save btn btn-primary btn-sm">Отправить данные</button></div></div>
+                                </p>
+                            </div>
+                        </form>
+                        <form action = "{% url 'pay_load' %}"  method="POST" class="post-form " > {% csrf_token %}
+                            <div class="col-md">
+                                <p>В форме "Наименование РТР" нужно указать название полезной нагрузки.</p>
+                                {% comment %} {{payload}} {% endcomment %}
+                                <div><label for="id_name">Наименование РТР:</label></div>
+                                <div>{{payload.name}}</div>
+                                <div><label for="id_spacecraft">КА:</label></div>
+                                <div>{{payload.spacecraft}}</div>
+                                <p class="lead">
+                                    <div><button id = "btn1" type="submit" class="save btn btn-primary btn-sm">Отправить данные</button></div>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 {% endblock%}
 
         </div>

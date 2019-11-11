@@ -21,6 +21,12 @@ urlpatterns = [
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('get/filter/',views.freq_sort, name='filter'),
     path('get/graph/<slug:data_id>/<slug:mt_name>/', Meas_graph.as_view(), name = 'graph'),
+    path('get/meastype_info/<slug:mt_name>/<slug:ssi_info_name>/<slug:id_measure>/<slug:valid>/',Check_valid.as_view(), name = 'valid'),
+    path('get/key/',views.key_create, name='key'),
+    path('get/cr_measure/',views.create_measure, name='create_measure'),
+    path('operator/',views.create_operator, name='op'),
+    path('payload/',views.create_payload, name='pay_load'),
+    path('key_list/', Keys_lists.as_view(), name = 'keys_list'),
 
 ]
 

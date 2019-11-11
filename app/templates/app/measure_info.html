@@ -9,37 +9,29 @@
                     <tr>
                         <th>Название измерения:</th>
                         <th>Название конфигурации:</th>
-                        <th>Полученные данные x,y:</th>
+                        <th>Время измерения:</th>
+                        <th>Ключи:</th>
+                        <th>Оператор:</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <th scope="row">{{mt_name}}</th>
-                        <td>{{ssi_name}}</td>
-                        <td>{{data.xy}}</td>
+                        <td><a href={% url 'ssi_detail' ssi_name %}>{{ssi_name}}</a></td>
+                        <td>{{data.measurement_data.time}}</td>
+                        <td>{{keys.key}}</td>
+                        <td>{{operator.get}}</td>
                     </tr>
                 </tbody>
             </table>
                 <div class="row">
                     <div class="col-2">
-                    <a href={% url 'measure_remove' data.id %} class="btn btn-danger">Удалить измерение</a>
+                        <a href={% url 'measure_remove' data.id %} class="btn btn-danger">Удалить измерение</a>
                     </div>
-                    <div class="col-2">
-                        <div class="custom-control custom-radio">
-                            <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
-                            <label class="custom-control-label text-success" for="customRadio1">Измерения проведены</label>
-                        </div>
-                    </div>
-                    <div class="col-2">
-                        <div class="custom-control custom-radio">
-                            <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
-                            <label class="custom-control-label text-danger" for="customRadio2">Измерения отсутствуют</label>
-                        </div>
-                    </div>
-                    <div class="col-2">
-                        <div class="custom-control custom-radio">
-                            <input type="radio" id="customRadio3" name="customRadio" class="custom-control-input">
-                            <label class="custom-control-label text-secondary" for="customRadio3">Не проверено!</label>
+                        <div class="col-8 ">
+                            <a href={% url 'valid' mt_name ssi_name data.id "2" %} class="btn btn-success btn-sm ">Измерения проведены</a>
+                            <a href={% url 'valid' mt_name ssi_name data.id "1" %} class="btn btn-danger btn-sm ">Измерения не проведены</a>
+                            <a href={% url 'valid' mt_name ssi_name data.id "0" %} class="btn btn-dark btn-sm ">Не проверено!</a>
                         </div>
                     </div>
                 </div>

@@ -7,9 +7,13 @@ def create_data(type_of_data):
     '''
     Возвращает массив байтов с данными
     '''
+    dirname=os.path.dirname(__file__)
+    main_dir=os.path.join(dirname, 'data_for_server')
+
     if type_of_data == 'afc':
-        d="app\client_server\data_for_server\GL"
+        d=os.path.join(main_dir, 'GL')
         l=os.listdir(path=d)
+
         rand = random.randint(0, l.__len__())
         t=l[rand]
         f = open(d+'/'+t, 'r')
@@ -17,8 +21,9 @@ def create_data(type_of_data):
         # f.close()
         return bytes(fr,'utf-8')
     if type_of_data == 'gd':
-        d="app\client_server\data_for_server\GD"
+        d=os.path.join(main_dir, 'GD')
         l=os.listdir(path=d)
+
         rand = random.randint(0, l.__len__())
         t=l[rand]
         f = open(d+'/'+t, 'r')
@@ -26,7 +31,7 @@ def create_data(type_of_data):
         f.close()
         return bytes(fr,'utf-8')
     if type_of_data == 'amam':
-        d="app\client_server\data_for_server\GT"
+        d=os.path.join(main_dir, 'GT')
         l=os.listdir(path=d)
         rand = random.randint(0, l.__len__())
         t=l[rand]
@@ -35,8 +40,9 @@ def create_data(type_of_data):
         f.close()
         return bytes(fr,'utf-8')
     if type_of_data == 'pos':
-        d="app\client_server\data_for_server\SP"
+        d=os.path.join(main_dir, 'SP')
         l=os.listdir(path=d)
+        
         rand = random.randint(0, l.__len__())
         t=l[rand]
         f = open(d+'/'+t, 'r')

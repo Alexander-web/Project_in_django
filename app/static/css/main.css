@@ -1,9 +1,20 @@
 body {
     background-color: #f2f2f2;
-    font-family: "Helvetica";
-    font-weight: 300;
+    font-family: system-ui;
+    font-weight: normal;
     font-size: 13px;
-    /* background-image: url(/static/images/white.png); */
+    background-image: url(/static/images/888.jpg);
+
+}
+.table {
+border: 0.5px solid #0e2c2a;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+border: 0.5px solid #1561942a;
 }
 nav {
     border-radius: 10px;
@@ -45,7 +56,6 @@ input {
     background-color: transparent;
 }
 
-
 #info {
     font-size: 100%;
     background-color: transparent;
@@ -54,9 +64,32 @@ input {
 }
 
 #form_select {
-    width: 830px;
+    width: 710px;
 }
 
 #tableSSI {
     margin-top: 10px;
+}
+
+#form_key1 {
+    height:250px;
+    width:500px;
+}
+#form_createmea1 {
+    height:200px;
+    width:600px;
+
+}
+#form_table_meas {
+    height:200px;
+    width:180px;
+}
+
+#row-in_createconfig1 {
+    margin-top: 10px;
+}
+
+#id_key {
+    height:21px;
+    width:166px;
 }

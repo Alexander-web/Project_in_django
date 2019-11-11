@@ -1,0 +1,31 @@
+{% extends 'app/base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Список созданных ключей:</th>
+                        <th>Действия:</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in key %}
+                        <tr>
+                            <td>
+                                <div>{{i}}</div>
+                            </td>
+                            <td>
+                                <a href="#!" class="btn btn-danger">Удалить</a>
+                            </tg>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

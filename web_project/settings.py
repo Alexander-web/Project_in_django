@@ -11,10 +11,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-
+# DJANGO_SETTINGS_MODULE=mysite.settings
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -38,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
+    'web_project',
     
 ]
 
@@ -75,10 +75,12 @@ WSGI_APPLICATION = 'web_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql', 
-        'NAME': 'DataBase_for_measures',
+        'NAME': 'Measures_for_VNA',
         'USER': 'postgres',
         'PASSWORD': 'django34',
         'HOST': 'localhost',
