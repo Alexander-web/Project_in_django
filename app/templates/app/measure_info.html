@@ -26,7 +26,7 @@
             </table>
                 <div class="row">
                     <div class="col-2">
-                        <a href={% url 'measure_remove' data.id %} class="btn btn-danger">Удалить измерение</a>
+                        <a href={% url 'measure_remove' data.id ssi_name%} class="btn btn-danger">Удалить измерение</a>
                     </div>
                         <div class="col-8 ">
                             <a href={% url 'valid' mt_name ssi_name data.id "2" %} class="btn btn-success btn-sm ">Измерения проведены</a>

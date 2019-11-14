@@ -1,5 +1,6 @@
 {% extends 'app/base.html' %}
 {% block content %}
+{% load staticfiles %}
 
 <div class="container-fluid">
     <div id="row3" class="row d-flex justify-content-around ">
@@ -12,14 +13,27 @@
                 {% endfor %}
                 </select>
                 <button type="submit" class="save btn btn btn-primary">Сортировать</button>
-            </form>         
+            </form>
+                <p>
+                <img src="{% static 'images/Измерения.PNG' %}" class='img-fluid' width='30' height='30'>
+                - Проведенне измерения
+                <img src="{% static 'images/Проведенные.PNG' %}" class='img-fluid' width='30' height='30'>
+                - Подтвержденные измерения
+                <img src="{% static 'images/Не_проверенные.PNG' %}" class='img-fluid' width='30' height='30'>
+                - Не проверенные измерения</p>
             <table id ='tableSSI' class="table table-bordered ">
                 <thead class="thead-light">
                     <tr>
                         <th>Имя SSI</th>
-                        <th>Изм</th>
-                        <th>Под-но</th>
-                        <th>Не пд-но</th>
+                        <th>
+                            <img src="{% static 'images/Измерения.PNG' %}" class='img-fluid' width='30' height='30'>
+                        </th>
+                        <th>
+                            <img src="{% static 'images/Проведенные.PNG' %}" class='img-fluid' width='30' height='30'>
+                        </th>
+                        <th>
+                            <img src="{% static 'images/Не_проверенные.PNG' %}" class='img-fluid' width='30' height='30'>
+                        </th>
                         <th>Входная частота, ГГц</th>
                         <th>Выходная частота, ГГц</th>
                         <th>Полоса частот, МГц</th>

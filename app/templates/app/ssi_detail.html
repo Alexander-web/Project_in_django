@@ -40,7 +40,7 @@
                             <div>{{j.time}}</div>
                             {% endfor %} 
                         </td> {% endcomment %}
-                        <td><a href={% url 'ssi_remove_ssilist' ssi.id %} class="btn btn-danger">Удалить</a></td>
+                        <td><a href={% url 'ssi_remove_ssilist' ssi.id %} class="btn btn-danger">Удалить SSI</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -85,7 +85,7 @@
     {% for j in  dict_meas.items%}
         {% if 'afc' in j %}
             <div class="row d-flex justify-content-center">
-                <div class="col-9">
+                <div class="col-10">
                     <table class="table table-bordered">
                     <p class="font-weight-bold">АЧХ</p>
                         <thead class="thead-light">
@@ -118,7 +118,8 @@
                                 </td>
                                 <td>{{user}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-info">Создать PDF</button>
+                                    <a href={% url 'create_pdf' i.ssi.name i.id i.mea.name %} class="btn btn-info">Создать PDF</a>
+                                    <a href={% url 'measure_remove' i.id i.ssi.name%} class="btn btn-danger">Удалить</a>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -129,7 +130,7 @@
         {% elif  'gd' in j%}
             {% comment %} <div>{{ssi_gd}}</div> {% endcomment %}
             <div class="row d-flex justify-content-center">
-                <div class="col-9">
+                <div class="col-10">
                     <table class="table table-bordered">
                     <p class="font-weight-bold">НГВЗ</p>
                         <thead class="thead-light">
@@ -161,7 +162,8 @@
                                 </td>
                                 <td>{{user}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-info">Создать PDF</button>
+                                    {% comment %} <a href={% url 'create_pdf' i.ssi.name%} class="btn btn-info">Создать PDF</a> {% endcomment %}
+                                    <a href={% url 'measure_remove' i.id i.ssi.name%} class="btn btn-danger">Удалить</a>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -172,7 +174,7 @@
         {% elif   'amam' in j %}
             {% comment %} <div>{{ssi_amam}}</div> {% endcomment %}
             <div class="row d-flex justify-content-center">
-                <div class="col-9">
+                <div class="col-10">
                     <table class="table table-bordered">
                     <p class="font-weight-bold" >АМ/АМ</p>
                         <thead class="thead-light">
@@ -204,7 +206,8 @@
                                 </td>
                                 <td>{{user}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-info">Создать PDF</button>
+                                    {% comment %} <a href={% url 'create_pdf' i.ssi.name%} class="btn btn-info">Создать PDF</a> {% endcomment %}
+                                    <a href={% url 'measure_remove' i.id i.ssi.name%} class="btn btn-danger">Удалить</a>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -215,7 +218,7 @@
         {% elif   'pos' in j%}
             {% comment %} <div>{{ssi_pos}}</div> {% endcomment %}
             <div class="row d-flex justify-content-center">
-                <div class="col-9">
+                <div class="col-10">
                     <table class="table table-bordered">
                     <p class="font-weight-bold">Точка насыщения</p>
                         <thead class="thead-light">
@@ -247,7 +250,8 @@
                                 </td>
                                 <td>{{user}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-info">Создать PDF</button>
+                                    {% comment %} <a href={% url 'create_pdf' i.ssi.name%} class="btn btn-info">Создать PDF</a> {% endcomment %}
+                                    <a href={% url 'measure_remove' i.id i.ssi.name%} class="btn btn-danger">Удалить</a>
                                 </td>
                             </tr>
                         {% endfor %}

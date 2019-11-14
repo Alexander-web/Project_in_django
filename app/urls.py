@@ -12,7 +12,7 @@ urlpatterns = [
     path("get/ssi_detail/<slug:ssi>/", SSIDetail.as_view(), name="ssi_detail"),
     path('get/measure/<slug:meas_name>/<slug:ssi_name>/', MeasuresData.as_view(), name="name_meas"),
     path('get/remove_from_que/<slug:name_remove>/', Remove_from_que.as_view(), name = 'ssi_remove'),
-    path('get/remove_from_measure/<slug:name>/', Remove_from_measure.as_view(), name = 'measure_remove'),
+    path('get/remove_from_measure/<slug:name>/<slug:ssiname>/', Remove_from_measure.as_view(), name = 'measure_remove'),
     path('get/make_measures/', views.make_measures, name = 'make_measures'),
     path('get/meastype_info/<slug:mt_name>/<slug:ssi_info_name>/<slug:id_measure>/', Meas_info.as_view(), name = 'meas_info'),
     path('create_SSI', views.ssi_new, name = 'create'),
@@ -27,6 +27,7 @@ urlpatterns = [
     path('operator/',views.create_operator, name='op'),
     path('payload/',views.create_payload, name='pay_load'),
     path('key_list/', Keys_lists.as_view(), name = 'keys_list'),
+    path('get/c_pdf/<slug:name_ssi>/<slug:id_data>/<slug:name_measure>/', Create_PDF.as_view(), name = 'create_pdf'),
 
 ]
 

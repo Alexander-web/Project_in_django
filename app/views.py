@@ -15,6 +15,7 @@ from .forms import *
 from .client_server.tcp_client import send_and_return
 from .scpi.afc_gd import create_meas
 import json
+from .create_pdf.Create_PDF import cr_PDF,plot_graf_in_svg
 
 #Функция отвечает за нормировку даных для графиков (возвращает данные в класс Meas_graph для дальнейшего преобразования в json)
 def norm_data(data_id,mt_name):
@@ -130,9 +131,9 @@ class Remove_from_que(TemplateView):
 
 #Отвечает за удаление уже проведенного измерения по нажатию кнопки
 class Remove_from_measure(TemplateView):
-    def get(self,req,name):
+    def get(self,req,name,ssiname):
         Measure.objects.get(id=name).delete()
-        return redirect('ssi_list')
+        return redirect('ssi_detail',ssiname)
 
 #Удаляет SSI добавленный через форму
 class  Remove_from_ssilist(TemplateView):
@@ -361,7 +362,30 @@ class Keys_lists(TemplateView):
         context['key']=Keys.objects.all()
         return render(req,self.template_name,context)
 
-
+class Create_PDF(TemplateView):
+    def get(self,req,name_ssi,id_data,name_measure):
+        if name_measure=="afc":
+            x_name='f, МГц'
+            y_name='P, дБ'
+            name="АЧХ"
+        if name_measure=="gd":
+            x_name='f, МГц'
+            y_name='t, нс'
+            name="ГВЗ"            
+        if name_measure=="amam":
+            x_name='Pвх, дБ'
+            y_name='Pвых, дБ'
+            name="АМ/АМ"            
+        if name_measure=="pos":
+            x_name='Pвх, дБ'
+            y_name='Pвых, дБ'
+            name="Точка насыщения"
+        give_data=norm_data(id_data,name_measure)#Получаем данные(x;y)
+        create_svg=plot_graf_in_svg(x_name, y_name,give_data,name)               #Создаем на основе полученных данных график svg
+        base_pdf=cr_PDF()                                             #Создаем базовый pdf c таблицами и добавляем туда нужные данные
+        base_pdf.common(base_pdf)
+        base_pdf.save_file()
+        return redirect('ssi_detail',name_ssi)
 
 
 
