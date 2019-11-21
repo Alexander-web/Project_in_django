@@ -45,6 +45,7 @@
         async function getdata(){
             let response = await fetch('{%url "graph" data_id mt_name %}')
             let data = await response.json()
+            console.log(data)
             return data
         }    
         var m;
@@ -59,17 +60,25 @@
             var chart = new Chart.Scatter(ctx, {
                 // The type of chart we want to create
                 type: 'line',
+                
                 // The data for our dataset
                 data: {
-                    datasets: [{
-                        label: 'Характеристика',
-                        backgroundColor: 'rgb(54, 162, 235)',
-                        borderColor: 'dark',
-                        data: m
-                    }]
+                    datasets: [{label: m[3],backgroundColor: 'rgb(54, 162, 235)', borderColor: '#175050',data: m[0],showLine: true,fill: false, }]
                 },
                 // Configuration options go here
-                options: {}
+                options: {
+                    scales: {
+                        xAxes: [{ 
+                            gridLines: { display: false, color: "black"}, 
+                            scaleLabel: {display: true, labelString: m[1], fontColor: "green" }
+                        }],
+                        yAxes: [{ 
+                            gridLines: { color: "black", borderDash: [2, 5]},
+                            scaleLabel: { display: true, labelString: m[2], fontColor: "green"}
+                        }]
+                    }
+                }
+                
             });
         }
         gt()

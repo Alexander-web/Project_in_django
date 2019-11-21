@@ -40,15 +40,11 @@ def create_meas(freqin, freqout, band, meas_type,numpoint):
     device.__send__("INITiate:CONTinuous OFF")#Отключить режим бесконечного свипирования
     device.__send__("INITiate:IMMediate;*wai")#Моментальный запуск
     
-    
-    
     if meas_type=="afc":
         device.__send__("CALC:FORM MLOG")#Устанавливает формат отображения для измерения лог?
         device.__send__("DISP:WIND:Y:AUTO")#Autoscale All
         print(device.__send__("*OPC?"))
         result = device.__send__("CALC:DATA? FDATA")#Получение данныx для НАЧХ
-
-    
 
     if meas_type=="gd":
         device.__send__("CALC:FORM GDEL")

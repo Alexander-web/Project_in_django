@@ -1,5 +1,6 @@
 {% extends 'app/base.html' %}
 {% block content %}
+{% load staticfiles %}
 
 <div class="container-fluid">
     <div class="row">
@@ -12,6 +13,8 @@
                         <th>Выходная частота, ГГц</th>
                         <th>Полоса, МГц</th>
                         <th>Частотный диапазон</th>
+                        <th>ПН:</th>
+                        <th>КА:</th>
                         {% comment %} <th>Проведенные измерения:</th>
                         <th>Время проведения:</th> {% endcomment %}
                         <th>Действия</th>
@@ -24,6 +27,8 @@
                         <td>{{ssi.output_frequency}}</td>
                         <td>{{ssi.band_frequency}}</td>
                         <td>{{ssi.freqrange.get.name}}</td>
+                        <td>{{ssi.pay_load}}</td>
+                        <td>{{ssi.pay_load.spacecraft}}</td>
                         {% comment %} <td>
                             {% for j in  ssi.meas.all%}
                                 {% if j.m.get.isvalid is 0 %}
@@ -85,7 +90,7 @@
     {% for j in  dict_meas.items%}
         {% if 'afc' in j %}
             <div class="row d-flex justify-content-center">
-                <div class="col-10">
+                <div class="col-11">
                     <table class="table table-bordered">
                     <p class="font-weight-bold">АЧХ</p>
                         <thead class="thead-light">
@@ -119,7 +124,10 @@
                                 <td>{{user}}</td>
                                 <td>
                                     <a href={% url 'create_pdf' i.ssi.name i.id i.mea.name %} class="btn btn-info">Создать PDF</a>
+                                    {% comment %} <a  href={% url 'download_pdf' %} download> Download Document </a> {% endcomment %}
+                                    <a href={% url 'download_pdf' %} class="btn btn-dark">Загрузить PDF</a>
                                     <a href={% url 'measure_remove' i.id i.ssi.name%} class="btn btn-danger">Удалить</a>
+
                                 </td>
                             </tr>
                         {% endfor %}
@@ -130,7 +138,7 @@
         {% elif  'gd' in j%}
             {% comment %} <div>{{ssi_gd}}</div> {% endcomment %}
             <div class="row d-flex justify-content-center">
-                <div class="col-10">
+                <div class="col-11">
                     <table class="table table-bordered">
                     <p class="font-weight-bold">НГВЗ</p>
                         <thead class="thead-light">
@@ -163,6 +171,8 @@
                                 <td>{{user}}</td>
                                 <td>
                                     {% comment %} <a href={% url 'create_pdf' i.ssi.name%} class="btn btn-info">Создать PDF</a> {% endcomment %}
+                                    <a href={% url 'create_pdf' i.ssi.name i.id i.mea.name %} class="btn btn-info">Создать PDF</a>
+                                    <a href={% url 'download_pdf' %} class="btn btn-dark">Загрузить PDF</a>
                                     <a href={% url 'measure_remove' i.id i.ssi.name%} class="btn btn-danger">Удалить</a>
                                 </td>
                             </tr>
@@ -174,7 +184,7 @@
         {% elif   'amam' in j %}
             {% comment %} <div>{{ssi_amam}}</div> {% endcomment %}
             <div class="row d-flex justify-content-center">
-                <div class="col-10">
+                <div class="col-11">
                     <table class="table table-bordered">
                     <p class="font-weight-bold" >АМ/АМ</p>
                         <thead class="thead-light">
@@ -207,6 +217,8 @@
                                 <td>{{user}}</td>
                                 <td>
                                     {% comment %} <a href={% url 'create_pdf' i.ssi.name%} class="btn btn-info">Создать PDF</a> {% endcomment %}
+                                    <a href={% url 'create_pdf' i.ssi.name i.id i.mea.name %} class="btn btn-info">Создать PDF</a>
+                                    <a href={% url 'download_pdf' %} class="btn btn-dark">Загрузить PDF</a>
                                     <a href={% url 'measure_remove' i.id i.ssi.name%} class="btn btn-danger">Удалить</a>
                                 </td>
                             </tr>
@@ -218,7 +230,7 @@
         {% elif   'pos' in j%}
             {% comment %} <div>{{ssi_pos}}</div> {% endcomment %}
             <div class="row d-flex justify-content-center">
-                <div class="col-10">
+                <div class="col-11">
                     <table class="table table-bordered">
                     <p class="font-weight-bold">Точка насыщения</p>
                         <thead class="thead-light">
@@ -251,6 +263,8 @@
                                 <td>{{user}}</td>
                                 <td>
                                     {% comment %} <a href={% url 'create_pdf' i.ssi.name%} class="btn btn-info">Создать PDF</a> {% endcomment %}
+                                    <a href={% url 'create_pdf' i.ssi.name i.id i.mea.name %} class="btn btn-info">Создать PDF</a>
+                                    <a href={% url 'download_pdf' %} class="btn btn-dark">Загрузить PDF</a>
                                     <a href={% url 'measure_remove' i.id i.ssi.name%} class="btn btn-danger">Удалить</a>
                                 </td>
                             </tr>

@@ -29,6 +29,10 @@ class FreqRangeManager(models.Manager):
     def get_queryset(self,freq):
         return super(FreqRangeManager, self).get_queryset().filter(name=freq)
 
+class SSIManager(models.Manager):
+    def get_queryset(self,freq):
+        return super(SSIManager, self).get_queryset().filter(freqrange__name=freq)
+
 class MeasureType(models.Model):                         #Тип измерерия АЧХ, НГВЗ, точка насыщения, АМ-АМ
     name = models.CharField(max_length=50,verbose_name="Тип измерения")
     key=models.ForeignKey("Keys", verbose_name=("Ключи"), on_delete=models.CASCADE, related_name = 'keys')
@@ -42,6 +46,8 @@ class SSI(models.Model):                                    #Конфигура�
     band_frequency = models.FloatField('Полоса частот')
     available_meas= models.ManyToManyField(MeasureType, related_name='ssi',verbose_name="Тип измерения")
     pay_load=models.ForeignKey(PayLoad,  null=True,blank=True, on_delete = models.CASCADE,related_name = 'pay_load_ssi',verbose_name="Полезная нагрузка")
+    objects=models.Manager()
+    ssi_manager=SSIManager()
     def __str__(self):
         return self.name
 
@@ -75,6 +81,7 @@ class AcceptData(models.Model):                            # X-Y данные
     xy = models.TextField('Полученные данные x,y')
     measurement_data = models.ForeignKey(Measure, on_delete = models.CASCADE,related_name = 'm')
     isvalid=models.IntegerField(default=0, verbose_name="Валидность")
+    realism=models.BooleanField(default=0, verbose_name="Реальность измерений:")
     def __str__(self):
         return ' Измерения: {}'.format(self.measurement_data)
 

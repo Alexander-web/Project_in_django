@@ -1,0 +1,82 @@
+{% extends 'app/base.html' %}
+{% block content %}
+
+<div class="container-fluid">
+    <div id="row-in_createconfig1" class="row d-flex justify-content-between">
+        <div class="col-5 ">
+            <form method="POST" class="d-flex justify-content-end">
+                {% csrf_token %}
+                <div class="col-5 ">
+                    <p>
+                        <label>Имя SSI:</label><br>
+                        <input type="text" name="name" value="{{ssi.name}}" />
+                    </p>
+                    <p>
+                        <label>Входная частота, ГГц:</label><br>
+                        <input type="number" name="input_frequency" value="{{ssi.input_frequency}}" />
+                    </p>
+                    <p>
+                        <label>Выходная частота, ГГц:</label><br>
+                        <input type="number" name="output_frequency" value="{{ssi.output_frequency}}" />
+                    </p>
+                    <button type="submit" class="save btn btn-success">Сохранить</button>
+                </div>
+                <div class="col-6 ">
+                    <p>
+                        <label>Полоса, МГц:</label><br>
+                        <input type="number" name="band_frequency" value="{{ssi.band_frequency}}" />
+                    </p>
+                    {% comment %} <p>
+                        <label>Доступные измерения:</label><br>
+
+                        <select name="available_meas" required="" id="id_available_meas" multiple="">
+                            {% for i in  mea_type%}
+                                <option value={{i}}> {{i}} </option>
+                            {% endfor %}
+                        </select>  {% endcomment %}
+                        {% comment %} <div id='div1'>{{ ssi_form.available_meas}}</div>
+                    </p>
+                    {% comment %} <p>
+                        <label>Полезная нагрузка:</label><br>
+                        <input type="text" name="pay_load" value="{{ssi.pay_load}}" />
+                    </p> {% endcomment %}
+                </div>
+            </form>
+        </div>
+        <div class="col-7">
+            <table class="table table-bordered">
+                <thead  class="thead-light" >
+                    <tr>
+                        <th>Имя SSI</th>
+                        <th>Входная частота, ГГц</th>
+                        <th>Выходная частота, ГГц</th>
+                        <th>Полоса частот, МГц</th>
+                        <th>Выбранные измерения</th>
+                        <th>Частотный диапазон</th>
+                        <th>ПН</th>
+                        <th>КА</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ssi.name}}</td>
+                        <td>{{ssi.input_frequency}}</td>
+                        <td>{{ssi.output_frequency}}</td>
+                        <td>{{ssi.band_frequency}}</td>
+                        <td>
+                        {% for meas in ssi.available_meas.all %}
+                            {{meas.name}}
+                        {% endfor %}
+                        </td>
+                        <td>{{ssi.freqrange.get.name}}</td>
+                        <td>{{ssi.pay_load}}</td>
+                        <td>{{ssi.pay_load.spacecraft}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <a href={% url 'create' %} class="btn btn-primary btn-sm">Вернуться к списку SSI</a>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

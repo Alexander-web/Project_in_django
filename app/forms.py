@@ -19,7 +19,7 @@ CHOICES_VALID = (
 class SSIform(forms.ModelForm):
     class Meta:
         model = SSI
-        fields = ('name', 'input_frequency','output_frequency','band_frequency','available_meas')
+        fields = ('name', 'input_frequency','output_frequency','band_frequency','available_meas', 'pay_load')
 
 class Keysform(forms.ModelForm):
     class Meta:
@@ -52,6 +52,9 @@ class Formfilter(forms.Form):
 
 class Choose_device(forms.Form):
     choose=forms.ChoiceField(widget=forms.RadioSelect(), choices=CHOICES, initial='real')
+
+# class UploadFileForm(forms.Form):
+#     file = forms.FileField()
 
 # class Valid_maesures(forms.Form):
 #     valid=forms.ChoiceField(widget=forms.RadioSelect(), choices=CHOICES_VALID, initial='not_chosen')

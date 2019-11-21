@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div id="row3" class="row d-flex justify-content-around ">
         <div class="col-md-8 ">
-            <form action = "filter/" method="POST" class="post-form "> {% csrf_token %}
+            <form action = {% url 'ssi_list' %} method="POST" class="post-form "> {% csrf_token %}
                 <select id = 'form_select' name="choice" id="id_choice" class="custom-select" >
                 <option value = "all" selected>Все диапазоны</option>
                 {% for i in freq %}
@@ -20,7 +20,7 @@
                 <img src="{% static 'images/Проведенные.PNG' %}" class='img-fluid' width='30' height='30'>
                 - Подтвержденные измерения
                 <img src="{% static 'images/Не_проверенные.PNG' %}" class='img-fluid' width='30' height='30'>
-                - Не проверенные измерения</p>
+                - Непроверенные измерения</p>
             <table id ='tableSSI' class="table table-bordered ">
                 <thead class="thead-light">
                     <tr>

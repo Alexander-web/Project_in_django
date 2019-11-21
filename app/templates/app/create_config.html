@@ -53,7 +53,7 @@
                 <table class="table table-bordered">
                     <thead class="thead-light">
                         <tr>
-                            <th>Типы измерений:</th>
+                            <th>Тип:</th>
                             <th>Ключи: <a href="{% url 'keys_list' %}">Полный список созданных ключей</a></th>
                             <th>Действия:</th>
                         </tr>
@@ -71,7 +71,9 @@
                                     {{m.key}}
                                 </td>
                                 <td>
-                                    <button type="button" class=" btn btn-danger btn-sm">Удалить</button>
+                                    <div><a href={% url 'ed_key' m.key.id %} class="btn btn-primary btn-sm">Изменить ключ</a></div> 
+                                    {% comment %} <a id= "del" href={% url 'remove_key' m.key.id %} class="btn btn-danger btn-sm">Удалить ключ</a> {% endcomment %}
+                                    <a id= "del" href={% url 'remove_measure_type' m.id %} class="btn btn-danger btn-sm">Удалить тип</a>    
                                 </td>
                             </tr>
                         {% endfor %}
@@ -87,6 +89,8 @@
                 <input type="text" name="name" maxlength="50" required="" id="id_name" placeholder="SSI_1">                                    
                 <label for="id_input_frequency">Входная частота,ГГц:</label>
                 <input type="number" name="input_frequency" required="" id="id_input_frequency" placeholder="28" step="0.001">
+                <label for="id_pay_load">ПН:</label>
+                <div id='div1'>{{form.pay_load}} </div>
                 <button id = "btn1" type="submit" class="save btn btn-primary">Добавить SSI</button>  
             </div>       
             <div class="col-md-4">
@@ -110,6 +114,8 @@
                         <th>Полоса частот, МГц</th>
                         <th>Выбранные измерения</th>
                         <th>Частотный диапазон</th>
+                        <th>ПН</th>
+                        <th>КА</th>
                         <th>Действия</th>
                     </tr>
                 </thead>
@@ -121,12 +127,17 @@
                             <td>{{i.ssi_element.output_frequency}}</td>
                             <td>{{i.ssi_element.band_frequency}}</td>
                             <td>
-                            {% for meas in i.ssi_element.available_meas.all %}
-                                {{meas.name}}
-                            {% endfor %}
+                                {% for meas in i.ssi_element.available_meas.all %}
+                                    {{meas.name}}
+                                {% endfor %}
                             </td>
                             <td>{{i.name}}</td>
-                            <td><a href={% url 'ssi_remove_ssilist' i.ssi_element.id %} class="btn btn-danger btn-sm">Удалить</a></td> 
+                            <td>{{i.ssi_element.pay_load.name}}</td>
+                            <td>{{i.ssi_element.pay_load.spacecraft}}</td>
+                            <td >
+                                <div><a href={% url 'edit_ssi' i.ssi_element.id %} class="btn btn-primary btn-sm">Изменить SSI</a></div> 
+                                <a id="del" href={% url 'ssi_remove_ssilist' i.ssi_element.id %} class="btn btn-danger btn-sm">Удалить SSI</a>
+                            </td> 
                             {% comment %} Доступ через SSI к SSI 
                             <td>{{s.input_frequency}}</td>
                             <td>{{s.output_frequency}}</td>

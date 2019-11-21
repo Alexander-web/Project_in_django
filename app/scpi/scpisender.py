@@ -43,7 +43,7 @@ class SCPI():
             data = b''
             if '?' in data_to_send:#В случае, когда в команде имеется вопрос ВАЦ передаст ответ, который надо обработать
                 while True:   
-                    tmp = self.sock.recv(1024)
+                    tmp = self.sock.recv(65000)
                     data += tmp
                     if '\n' in tmp.decode('utf-8'):
                         break
