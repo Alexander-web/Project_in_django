@@ -32,5 +32,5 @@ urlpatterns = [
     path('key_rem/<slug:id_key>/', Remove_keys.as_view(), name = 'remove_key'),
     path('type_rem/<slug:id_type>/', Remove_type.as_view(), name = 'remove_measure_type'),
     path('edit_key/<int:id_edit_key>/',views.edit_key, name='ed_key'),
-    path('download/',views.downloadPDF, name='download_pdf'),
+    path('download/<slug:ssi>/<slug:type_m>/',views.downloadPDF, name='download_pdf'),
 ]

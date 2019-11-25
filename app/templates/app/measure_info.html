@@ -80,6 +80,11 @@
                 }
                 
             });
+
+            window.onload = function() {
+			    var ctx = document.getElementById('myChart').getContext('2d');
+			    window.myMixedChart = new Chart(ctx, {type: 'line',data: m[4],options: {responsive: true,title: {display: true,text: 'Chart.js Combo Bar Line Chart'},tooltips: {mode: 'index',intersect: true}}});
+		    };
         }
         gt()
     </script>

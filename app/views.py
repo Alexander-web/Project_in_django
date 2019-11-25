@@ -326,6 +326,44 @@ class Meas_info(TemplateView):
         context['operator']=Operator.objects.all()
         return render(req,self.template_name,context)
 
+def make_mask(num_points,start_level):
+    num=num_points/3
+    mask=[]
+    for i in range(num):
+        point_step=10
+        level_up=start_level*i
+        mask.append(level_up)
+    level_smooth=max(mask)
+    for i in range(num):
+        mask.append(level_smooth)
+    sl=mask[0:num]
+    for i in sl:
+        level_down=max(mask)-i
+        mask.append(level_down)
+    return mask
+
+def make_mask(num_points,start_level):
+    num=num_points/3
+    mask=[]
+    mask_common=[]
+    level_up=start_level
+    for i in range(int(num)):
+        point_step=5
+        level_up+=start_level+point_step
+        mask.append(level_up)
+    level_smooth=max(mask)
+    for i in range(int(num)):
+        mask.append(level_smooth)
+    sl=mask[0:int(num)]
+    for i in sl:
+        level_down=max(mask)-i
+        mask.append(level_down)
+    for i in mask:
+        common_level=i-max(mask)
+        mask_common.append(common_level)
+    return mask_common
+
+
 #Класс выдает json данные, взятые из БД, библиотеке feth 
 class Meas_graph(TemplateView):
     def get(self,req,data_id,mt_name):
@@ -346,7 +384,8 @@ class Meas_graph(TemplateView):
             y_name='Pвых, дБ'
             name="Точка насыщения - SP"
         evidence=norm_data(data_id,mt_name)
-        json_data=json.dumps([evidence, x_name, y_name,name])
+        mask=make_mask(15,0)
+        json_data=json.dumps([evidence, x_name, y_name,name,mask])
         return HttpResponse(json_data)
 
 #Представление (функция) отвечающя за взаимодействие с формой
@@ -463,10 +502,10 @@ def create_measure(req):
 
 def create_operator(req):
     if req.method == "POST":
-        form = Operatorform(req.POST)
+        # form = Operatorform(req.POST)
         form_spacecraft = SpaceCraftform(req.POST)
-        if form_spacecraft.is_valid() and form.is_valid():
-            operator = form.save()
+        if form_spacecraft.is_valid():
+            # operator = form.save()
             spacecraft = form_spacecraft.save()
     return redirect('base_list')
 
@@ -575,11 +614,13 @@ class Create_PDF(TemplateView):
         return redirect('ssi_detail',name_ssi)
 
 
-def downloadPDF(req):
+def downloadPDF(req,ssi,type_m):
     try:
         # file_path='C:/Users/alexK/Desktop/Project/simple_pdf.pdf'
         file_path=os.path.abspath("simple_pdf.pdf")
-        return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
+        response=FileResponse(open(file_path, 'rb'), content_type='application/pdf')
+        response['Content-Disposition'] = 'filename={}-{}.pdf'.format(ssi,type_m)
+        return response
     except FileNotFoundError:
         raise Http404()
 

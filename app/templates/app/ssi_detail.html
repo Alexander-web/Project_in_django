@@ -125,7 +125,7 @@
                                 <td>
                                     <a href={% url 'create_pdf' i.ssi.name i.id i.mea.name %} class="btn btn-info">Создать PDF</a>
                                     {% comment %} <a  href={% url 'download_pdf' %} download> Download Document </a> {% endcomment %}
-                                    <a href={% url 'download_pdf' %} class="btn btn-dark">Загрузить PDF</a>
+                                    <a href={% url 'download_pdf' i.ssi.name i.mea.name%} class="btn btn-dark">Загрузить PDF</a>
                                     <a href={% url 'measure_remove' i.id i.ssi.name%} class="btn btn-danger">Удалить</a>
 
                                 </td>
@@ -172,7 +172,7 @@
                                 <td>
                                     {% comment %} <a href={% url 'create_pdf' i.ssi.name%} class="btn btn-info">Создать PDF</a> {% endcomment %}
                                     <a href={% url 'create_pdf' i.ssi.name i.id i.mea.name %} class="btn btn-info">Создать PDF</a>
-                                    <a href={% url 'download_pdf' %} class="btn btn-dark">Загрузить PDF</a>
+                                    <a href={% url 'download_pdf' i.ssi.name i.mea.name%} class="btn btn-dark">Загрузить PDF</a>
                                     <a href={% url 'measure_remove' i.id i.ssi.name%} class="btn btn-danger">Удалить</a>
                                 </td>
                             </tr>
@@ -218,7 +218,7 @@
                                 <td>
                                     {% comment %} <a href={% url 'create_pdf' i.ssi.name%} class="btn btn-info">Создать PDF</a> {% endcomment %}
                                     <a href={% url 'create_pdf' i.ssi.name i.id i.mea.name %} class="btn btn-info">Создать PDF</a>
-                                    <a href={% url 'download_pdf' %} class="btn btn-dark">Загрузить PDF</a>
+                                    <a href={% url 'download_pdf' i.ssi.name i.mea.name%} class="btn btn-dark">Загрузить PDF</a>
                                     <a href={% url 'measure_remove' i.id i.ssi.name%} class="btn btn-danger">Удалить</a>
                                 </td>
                             </tr>
@@ -264,7 +264,7 @@
                                 <td>
                                     {% comment %} <a href={% url 'create_pdf' i.ssi.name%} class="btn btn-info">Создать PDF</a> {% endcomment %}
                                     <a href={% url 'create_pdf' i.ssi.name i.id i.mea.name %} class="btn btn-info">Создать PDF</a>
-                                    <a href={% url 'download_pdf' %} class="btn btn-dark">Загрузить PDF</a>
+                                    <a href={% url 'download_pdf' i.ssi.name i.mea.name%} class="btn btn-dark">Загрузить PDF</a>
                                     <a href={% url 'measure_remove' i.id i.ssi.name%} class="btn btn-danger">Удалить</a>
                                 </td>
                             </tr>

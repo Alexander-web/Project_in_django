@@ -59,16 +59,16 @@
                     <hr class="my-2">
                     <div class="row d-flex justify-content-center">
                         <form action = "{% url 'op' %}"  method="POST" class="post-form " > {% csrf_token %}
-                            <div class="col-md ">
-                                <p>В форме "Оператор" необходимо заполнить имя и фамилию того, кто будет проводить измерения.</p>
+                            {% comment %} <div class="col-md ">
+                                <p>В форме "Оператор" необходимо заполнить имя и фамилию того, кто будет проводить измерения.</p> {% endcomment %}
                                 {% comment %} {{operator}} {% endcomment %}
-                                <div><label for="id_firstname">Имя оператора:</label></div>
+                                {% comment %} <div><label for="id_firstname">Имя оператора:</label></div>
                                 <div>{{operator.firstname}}</div>
                                 <div><label for="id_lastname">Фамилия оператора:</label></div>
                                 <div>{{operator.lastname}}</div>
-                            </div>
+                            </div> {% endcomment %}
                             <div class="col-md">
-                                <p>В форме "Наименование КА" нужно указать название космического аппарата, для которого будут проводися измерения.</p>
+                                <p>В форме "Наименование КА" нужно указать название КА, для которого будут проводися измерения.</p>
                                 {% comment %} {{spacecraft}} {% endcomment %}
                                 <div><label for="id_name">Наименование КА:</label></div>
                                 <div>{{spacecraft.name}}</div>
@@ -79,7 +79,7 @@
                         </form>
                         <form action = "{% url 'pay_load' %}"  method="POST" class="post-form " > {% csrf_token %}
                             <div class="col-md">
-                                <p>В форме "Наименование РТР" нужно указать название полезной нагрузки.</p>
+                                <p>В форме "Наименование РТР" нужно указать название ПН.</p>
                                 {% comment %} {{payload}} {% endcomment %}
                                 <div><label for="id_name">Наименование РТР:</label></div>
                                 <div>{{payload.name}}</div>
@@ -90,7 +90,6 @@
                                 </p>
                             </div>
                         </form>
-                    <p>Все ответы на возникшие вопросы можно найти в разделе Help!</p>
                     </div>
                 </div>
                 {% endblock%}
